@@ -12,7 +12,7 @@ from solid.utils import *
 SEGMENTS = 32
 
 flange_w1 = 40
-flange_w2 = 32
+flange_w2 = 31
 flange_d1 = 7
 flange_d2 = 8
 flange_h = 50
