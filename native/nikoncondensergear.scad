@@ -150,9 +150,10 @@ function outer_radius    (mm_per_tooth=3,number_of_teeth=11,clearance=0.1)    //
 //The gears will continue to be rotated to mesh correctly if you change the number of teeth.
 
 n1 = 14;
-mm_per_tooth = 7*3.1415/n1;
+mm_per_tooth = 7*3.1415/n1 * 0.9;
+echo(outer_radius(mm_per_tooth, n1)*2);
 thickness    = 9;
-hole         = 3;
+hole         = 3.2;
 
 gear(mm_per_tooth,n1,thickness,hole, twist = 360/7);
 
