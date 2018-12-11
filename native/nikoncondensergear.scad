@@ -74,7 +74,7 @@ module gear (
 	assign(p  = mm_per_tooth * number_of_teeth / pi / 2)  //radius of pitch circle
 	assign(c  = p + mm_per_tooth / pi - clearance)        //radius of outer circle
 	assign(b  = p*cos(pressure_angle))                    //radius of base circle
-	assign(r  = p-(c-p)-clearance)                        //radius of root circle
+	assign(r  = p-(c-p)-clearance - 0.3)                        //radius of root circle
 	assign(t  = mm_per_tooth/2-backlash/2)                //tooth thickness at pitch circle
 	assign(k  = -iang(b, p) - t/2/p/pi*180) {             //angle to where involute meets base circle on each side of tooth
 		difference() {
@@ -155,6 +155,9 @@ echo(outer_radius(mm_per_tooth, n1)*2);
 thickness    = 9;
 hole         = 3.2;
 
-gear(mm_per_tooth,n1,thickness,hole, twist = 360/7);
+$fa = 1;
 
-
+union() {
+      gear(mm_per_tooth,n1,thickness,hole, twist = 360/7);
+      translate([0, 1.2+0.05, 2]) cube(size = [0.8, 0.7, 5], center = true);
+}
