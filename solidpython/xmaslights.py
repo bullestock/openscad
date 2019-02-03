@@ -11,9 +11,9 @@ from solid.utils import *
 
 SEGMENTS = 32
 
-d1 = 7
+d1 = 6.5
 d2 = 8.6
-d3 = 5
+d3 = 5.5
 h1 = 6.7
 h2 = 1.2
 
