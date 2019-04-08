@@ -86,8 +86,13 @@ module gear (
 								[0, -hole_diameter/10],
 								polar(r, -181/number_of_teeth),
 								polar(r, r<b ? k : -180/number_of_teeth),
-								q7(0/5,r,b,c,k, 1),q7(1/5,r,b,c,k, 1),q7(2/5,r,b,c,k, 1),q7(3/5,r,b,c,k, 1),q7(4/5,r,b,c,k, 1),q7(5/5,r,b,c,k, 1),
-								q7(5/5,r,b,c,k,-1),q7(4/5,r,b,c,k,-1),q7(3/5,r,b,c,k,-1),q7(2/5,r,b,c,k,-1),q7(1/5,r,b,c,k,-1),q7(0/5,r,b,c,k,-1),
+								q7(0/5,r,b,c,k, 1), q7(1/5,r,b,c,k, 1),
+                                                                q7(2/5,r,b,c,k, 1), q7(3/5,r,b,c,k, 1),
+                                                                q7(4/5,r,b,c,k, 1), q7(5/5,r,b,c,k, 1),
+								q7(5/5,r,b,c,k,-1), q7(4/5,r,b,c,k,-1),
+                                                                q7(3/5,r,b,c,k,-1), q7(2/5,r,b,c,k,-1),
+                                                                q7(1/5,r,b,c,k,-1), q7(0/5,r,b,c,k,-1),
+                                                                // where tooth meets base
 								polar(r, r<b ? -k : 180/number_of_teeth),
 								polar(r, 181/number_of_teeth)
 							],
@@ -150,7 +155,7 @@ function outer_radius    (mm_per_tooth=3,number_of_teeth=11,clearance=0.1)    //
 //The gears will continue to be rotated to mesh correctly if you change the number of teeth.
 
 n1 = 14;
-mm_per_tooth = 7*3.1415/n1 * 0.88;
+mm_per_tooth = 7*3.1415/n1 * 0.85;
 echo(outer_radius(mm_per_tooth, n1)*2);
 thickness    = 9;
 hole         = 3.25;
@@ -158,6 +163,6 @@ hole         = 3.25;
 $fa = 1;
 
 union() {
-      gear(mm_per_tooth,n1,thickness,hole, twist = 360/7, pressure_angle  = 24);
+      gear(mm_per_tooth, n1, thickness, hole, twist = 360/7, pressure_angle = 24);
       translate([0, 1.28, 2]) cube(size = [0.75, 0.7, 5], center = true);
 }
