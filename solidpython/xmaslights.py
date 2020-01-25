@@ -11,28 +11,29 @@ from solid.utils import *
 
 SEGMENTS = 32
 
-d1 = 6.5
+d1 = 6.9
 d2 = 8.6
-d3 = 5.5
+d3 = 5.4
 h1 = 6.7
 h2 = 1.2
 
 def flange():
-    s = sphere(d = h2)
-    d = down(0)(cylinder(d = d2 - h2, h = h2))
-    return minkowski()(s, d) - down(0)(cylinder(d = d2 + 2, h = h2+1))
+    d = down(0)(cylinder(d = d2, h = h2))
+    return cylinder(d = d2, h = h2)
 
 def body():
-    rr = 1
-    s = sphere(r = rr)
-    c = cylinder(d = d1 - 2*rr, h = h1 - rr)
-    return minkowski()(s, c) - down(2)(cylinder(d = d2 + 2, h = 2))
+    c = cylinder(d = d1, h = h1)
+    return c
 
 def slit():
-    return translate([-5, 0, h1 - 0.3])(rotate([0, 90, 0])(cylinder(d = 0.8, h = 10)))
+    sd = 1
+    return translate([-5, 0, h1 - 0.3])(rotate([0, 90, 0])(cylinder(d = sd, h = 10)))
 
 def separator():
-    return translate([-0.9, -2.5, h1-2])(cube([1.8, 5, 1]))
+    w = 3
+    h = 1.5
+    l = 5.5
+    return translate([-w/2, -l/2, h1-h])(cube([w, l, h]))
 
 def assembly():
     f = flange()
