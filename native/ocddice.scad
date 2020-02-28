@@ -3,14 +3,14 @@
  */
 
 $fn         = 128 ;
-WIDTH       = 64  ;
-DOT_DEEP    = 3   ;
+WIDTH       = 16  ;
+DOT_DEEP    = .5   ;
 DOT_DENSITY = .2  ;
 DOT_TABLE   = [
-      [  2, [   2, 3, 4, 5, 6 ] ]
-    , [  5, [               6 ] ]
-    , [  8, [         4, 5, 6 ] ]
-    , [  0, [ 1,   3,    5    ] ] ];
+      [  2, [   2, 3, 4, 5, 6 ] ],
+      [  5, [               6 ] ],
+      [  8, [         4, 5, 6 ] ],
+      [  0, [ 1,   3,    5    ] ] ];
 
 tr = [ cos($t*360)*360 , sin($t*360)*360  ];
 tc = [ abs(cos($t*360)), abs(sin($t*360)) ];
@@ -23,7 +23,7 @@ module playcube()
 difference() {
     intersection(){
         cube(WIDTH,center=true);
-        sphere(WIDTH*2/3,center=true);
+        sphere(WIDTH*0.75,center=true);
     }
 
     for(i=[
@@ -38,9 +38,47 @@ difference() {
 }
 
 module _dots( n )
-    for(i=[-1:1],j=[-1:1])
-        if(search(n,DOT_TABLE[search(abs(i*3+j*5),DOT_TABLE)[0]][1]))
-            _dot(1,DOT_DENSITY*i,DOT_DENSITY*j);
+{
+    if (n == 1)
+    {
+        _dot(1, 0.1, 0.2);
+    }
+    else if (n == 2)
+    {
+        _dot(1, 0.15, 0.18);
+        _dot(1, -0.05, -0.17);
+    }
+    if (n == 3)
+    {
+        _dot(1, 0.15, 0.25);
+        _dot(1, -0.15, -0.17);
+        _dot(1, 0.08, -0.03);
+    }
+    if (n == 4)
+    {
+        _dot(1, 0.25, 0.33);
+        _dot(1, -0.05, -0.27);
+        _dot(1, -0.23, -0.18);
+        _dot(1, 0.25, -0.17);
+    }
+    if (n == 5)
+    {
+        _dot(1, 0.25, 0.35);
+        _dot(1, -0.05, -0.27);
+        _dot(1, -0.235, -0.18);
+        _dot(1, 0.25, -0.17);
+        _dot(1, 0.09, 0.02);
+    }
+    if (n == 6)
+    {
+        _dot(1, 0.25, 0.35);
+        _dot(1, -0.05, -0.27);
+        _dot(1, -0.235, -0.18);
+        _dot(1, 0.25, -0.17);
+        _dot(1, -0.209, 0.402);
+        _dot(1, 0.1, 0.2);
+    }
+}
 
 module _dot( n, x, y ) {
     translate([WIDTH*x,WIDTH*y,WIDTH*.5-DOT_DEEP])
