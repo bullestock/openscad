@@ -57,7 +57,7 @@ def assembly():
     led_x = dia/2 - 5
     led_y = -5
     ledhole = trans(dia/2 - 5, led_y, 30, rot(90, 0, 90, cylinder(d = 5, h = 10)))
-    ledtube = trans(dia/2 - 5, led_y, 30, rot(90, 0, 90, cylinder(d = 7, h = 5)))
+    ledtube = trans(dia/2 - 4, led_y, 30, rot(90, 0, 90, cylinder(d = 7, h = 4)))
     plughole = trans(dia/2, led_y, 10, ccube(5, 4.7, 6))
     plugtube = trans(dia/2 - 4, led_y, 10-1.5, ccube(5, 4.7+3, 6+3))
     pinshole = trans(dia/2 - 5, led_y, 10+1, ccube(10, 3, 4))
