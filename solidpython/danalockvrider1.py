@@ -15,19 +15,19 @@ SEGMENTS = 32
 e = 0.001
 
 def assembly():
-    free_h = 6 + 5
+    free_h = 11
     cyl1 = cylinder(d = 8.5, h = free_h)
     cut = ccube(10, 10, 4)
     wi = 5
-    disc_th = 2
+    disc_th = 3
     p1 = cyl1 - trans(0, -(5 + wi/2), -1, cut) - trans(0, (5 + wi/2), -1, cut)
     disc = cylinder(d = 25, h = disc_th)
-    center_hole = cylinder(d = 3, h = free_h + disc_th + 2) + up(free_h + disc_th + e)(cylinder(d = 6, h = 1))
-    insert_hole = cylinder(d = 3.9, h = 5)
-    mount_hole = cylinder(d = 3, h = 5) + cylinder(d = 6, h = 1)
+    center_hole = cylinder(d = 3.5, h = free_h + disc_th + 2)
+    insert_hole = cylinder(d = 4.2, h = 5)
+    mount_hole = cylinder(d = 3.5, h = 5) + cylinder(d = 7, h = 1)
     d = 15
     mount_holes = trans(-d/2, 0, 0, mount_hole) + trans(d/2, 0, 0, mount_hole)
-    return p1 + up(free_h)(disc) - down(1)(center_hole) - up(3.5)(insert_hole) - up(free_h - e)(mount_holes)
+    return p1 + up(free_h)(disc) - down(1)(center_hole) - up(free_h - 1.5)(insert_hole) - up(free_h - e)(mount_holes)
 
 if __name__ == '__main__':
     a = assembly()
