@@ -23,15 +23,18 @@ th = 3
 
 def threadhole(x, y):
     # 'turns' must match h
-    return trans(x, y, 1, threadlib.nut("G1/4", turns=h/1.337, Douter = 25));
+    return trans(x, y, th, threadlib.nut("G1/4", turns=(h - th)/1.337, Douter = 25));
 
 def corner(x, y):
     return trans(x, y, 0, cylinder(r = corner_radius, h = th))
 
 def i_corner(x, y):
-    return trans(x, y, 0, cylinder(r = inner_corner_radius, h = h))
+    return trans(x, y, 0, cylinder(r = inner_corner_radius, h = h + th))
 
 def assembly():
+    include_holders = True
+    include_frame = False
+    include_bottom = False
     w = 170
     l = 120
     inset = 8
@@ -44,7 +47,15 @@ def assembly():
     bottom = hull()(corner(w/2, l/2) + corner(-w/2, l/2) + corner(w/2, -l/2) + corner(-w/2, -l/2))
     outer = hull()(up(1)(bottom) + up(h - 2)(bottom))
     inner = up(th)(hull()(i_corner(w/2 - th, l/2 - th) + i_corner(-(w/2 - th), l/2 - th) + i_corner(w/2 - th, -(l/2 - th)) + i_corner(-(w/2 - th), -(l/2 - th))))
-    return bottom + outer - inner + h1 + h2 + h3 + h4
+    a = None
+    if include_frame:
+        a = outer - down(th)(inner)
+    if include_bottom:
+        a = down(0)((outer - down(5)(inner)))
+    if include_holders:
+        frame = outer - down(th)(inner)
+        a = h1 - frame # + h2 + h3 + h4
+    return a
 
 if __name__ == '__main__':
     a = assembly()

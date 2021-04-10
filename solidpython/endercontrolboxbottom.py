@@ -8,6 +8,7 @@ import re
 # Assumes SolidPython is in site-packages or elsewhwere in sys.path
 from solid import *
 from solid.utils import *
+from utils import *
 
 SEGMENTS = 32
 
@@ -15,25 +16,24 @@ e = 0.001
 
 stud_h = 20
 iw = 95
-id = 90+12
-ih = stud_h + 8 + 3
+id = 90+12+5
+ih = stud_h + 8
 th = 2
 
 def stud(x, y):
-    return translate([x + th/2, y + th/2, 0])(cylinder(h = stud_h, d2 = 6, d1 = 10) - up(stud_h - 5 + 0.1)(hole()(cylinder(h = 5, d = 3.7))))
+    return translate([x + th/2, y + th/2, 0])(cylinder(h = stud_h, d2 = 8, d1 = 10) - up(stud_h - 5 + 0.1)(hole()(cylinder(h = 5, d = 4))))
 
 def hinge(x):
-    rd = 10
     hw = 20
     hth = 5
-    cu = cube([hth, hw - rd, hw - rd])
-    cy = rotate([0, 90])(cylinder(d = rd, h = 0.01))
+    cu = cube([hth, hw, hw])
+    cy = rotate([0, 90])(cylinder(d = 20, h = hth))
     ho = rotate([0, 90])(cylinder(d = 5, h = 10))
-    min = minkowski()(cu, cy)
-    return translate([x - hth/2, -hw/2 - rd/2 + 7, rd/2])(min + translate([0, rd, -5])(cube([hth, rd, hw])) - translate([-2, hw/2 - rd/2, hw/2 - rd/2])(ho))
+    h_offset = 8
+    return trans(x - hth/2, -h_offset, 10, cy) + trans(x - hth/2, -h_offset, 0, cu) - trans(x - hth/2 - 1, -h_offset, 10, ho)
 
 def assembly():
-    stud_x = 5
+    stud_x = 4.5
     stud_y = 17
     stud_x_sep = 87.75
     stud_y_sep = 64.85

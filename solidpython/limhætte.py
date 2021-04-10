@@ -20,12 +20,16 @@ def segment(w, d, h):
     return hull()(c1+c2)
 
 def assembly():
-    s1 = up(0)(segment(13.8, 6.2, 7))
-    s2 = up(7)(segment(10, 5, 5))
-    s3 = up(7+5)(segment(7, 5, 5))
+    h1 = 10
+    s1 = up(0)(segment(13.8, 6.2, h1))
+    h2 = 5
+    s2 = up(h1)(segment(10, 5, h2))
+    h3 = 5
+    s3 = up(h1+h2)(segment(7, 5, h2))
     inner = s1 + s2 + s3
-    outer = segment(20, 12, 20)
-    tab = translate([10, 0, 7+5+5+1])(segment(20, 12, 2)) - right(14)(cylinder(d = 4, h = 100))
+    outer = segment(h1+h2+h3, 12, 20+5)
+    tab = translate([10, 0, h1+h2+h3])(segment(20, 12, 5)) - right(14)(cylinder(d = 4, h = 100))
+    #
     return outer - down(e)(inner) + tab
 
 if __name__ == '__main__':

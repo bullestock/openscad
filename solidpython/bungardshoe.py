@@ -26,23 +26,26 @@ def block(w, l, h, inset):
     return c - (c1 + c2)
     
 def assembly():
-    inner = trans(-e, 0, -5, block(80, 80-.5, 20, 20)) # sub .5 for tight fit
+    inner = trans(-e, 0, -5, block(80, 80-.5, 15, 20)) # sub .5 for tight fit
     shell = 15
     offset = 18
-    outer = trans(0, -offset/2, 0, block(80 + shell, 80 + offset + 2*shell, 20 + 5, 35))
+    outer = trans(0, -offset/2, 0, block(80 + shell, 80 + offset + 2*shell, 17, 35))
     cutout = left(e)(block(75, 70, 30, 17))
-    cutout2 = trans(68, -20, 0, cylinder(h = 30, d = 15))
+    cutout2 = trans(68, -20, -1, cylinder(h = 30, d = 15))
+    cutout3 = trans(50, 35, -1, cylinder(h = 30, d = 15))
     sh = 20+10
     sw = 5
-    c1 = trans(5, -(45+sw/2+offset), 0, cylinder(d = sw, h = sh))
-    c2 = trans(5, (45+sw/2), 0, cylinder(d = sw, h = sh))
+    c1 = trans(15, -(45+sw/2+offset), 0, cylinder(d = sw, h = sh))
+    c2 = trans(15, (45+sw/2), 0, cylinder(d = sw, h = sh))
     c3 = trans(60+sw/2, -(45+sw/2+offset), 0, cylinder(d = sw, h = sh))
     c4 = trans(60+sw/2, (45+sw/2), 0, cylinder(d = sw, h = sh))
     c5 = trans(85+sw/2, -(20+sw/2+offset), 0, cylinder(d = sw, h = sh))
     c6 = trans(85+sw/2, (20+sw/2), 0, cylinder(d = sw, h = sh))
-    slits = hull()(c1 + c3) + hull()(c2 + c4) + hull()(c5 + c6) + hull()(c3 + c5) + hull()(c4 + c6) + hull()(c1 + c2)
+    slits = hull()(c1 + c3) + hull()(c2 + c4) + hull()(c5 + c6) + hull()(c3 + c5) + hull()(c4 + c6)
     exhaust = trans(50, -51, -1, cylinder(h = 30, d = 20))
-    return outer - inner - cutout - down(sh-15)(slits) - cutout2 - exhaust
+    mh1 = trans(6, -(45+sw/2+offset), -1, cylinder(d = 6, h = 7))
+    mh2 = trans(6, 45+sw/2, -1, cylinder(d = 6, h = 7))
+    return outer - inner - cutout - down(sh-15)(slits) - cutout2 - cutout3 - exhaust - mh1 - mh2
 
 if __name__ == '__main__':
     a = assembly()
