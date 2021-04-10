@@ -16,22 +16,22 @@ SEGMENTS = 128
 e = 0.01
 
 groove_id = 45
-groove_od = 53
-groove_depth = 2
+groove_od = 49.5
+groove_depth = 2.8
 ring_id = 42
 ring_od = 59
 ring_h = 7
 slot_r = 24
-disc_id = 10
+disc_id = 14
 disc_od = ring_id + 1
 disc_th = 2
 
 def slot(angle):
-    d1 = 4
+    d1 = 3
     d2 = 2.5
     return rot(0, 0, angle,
                trans(slot_r, 0, -2,
-                     ccube(d1, 9, 10) + trans(d2-e, 0, 5, ccube(d2, 9, 5))))
+                     ccube(d1, 9, 10) + trans(d2-e, 0, 4, ccube(d2, 9, 7))))
 
 def assembly():
     groove = cylinder(d = groove_od, h = groove_depth) - down(1)(cylinder(d = groove_id, h = groove_depth+2))
@@ -41,7 +41,12 @@ def assembly():
     for a in range(1, 6):
         slots = slots + slot(a*60)
     body = ring - down(e)(groove)
-    return body + disc - slots
+    # Screw no. 10
+    mounthole = up(6)(cylinder(d = 1.8, h = 5) + down(2)(cylinder(d = 4, h = 2)))
+    mhd = 18
+    mhh = 4
+    mountholes = trans(-mhd, mhh, 0, mounthole) + trans(mhd, mhh, 0, mounthole)
+    return body + disc - slots - mountholes
 
 if __name__ == '__main__':
     a = assembly()
