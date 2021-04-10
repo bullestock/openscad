@@ -12,17 +12,18 @@ from utils import *
 
 SEGMENTS = 128
 
-e = 0.001
+e = 0.01
 
 def assembly():
-    insert_hole = cylinder(d = 4.2, h = 5, segments = 16)
+    insert_hole = cylinder(d = 4.2, h = 15, segments = 16)
     d = 15
     insert_holes = trans(-d/2, 0, 0, insert_hole) + trans(d/2, 0, 0, insert_hole)
     rr = 4
-    block1 = roundccube(35, 12, 24+rr, rr)
+    block1 = roundccube(35, 12, 13+rr, rr)
     hcutter = ccube(40, 20, rr+1)
-    indent = rot(0, 90, 0, cylinder(d = 25, h = 40))
-    indents = trans(-20, 15, 15, indent) + trans(-20, -15, 15, indent)
+    indent = rot(0, 90, 0, cylinder(d = 30, h = 40))
+    pinch = 19
+    indents = trans(-20, pinch, 10, indent) + trans(-20, -pinch, 10, indent)
     main = down(rr+1)(block1 - hcutter) - indents
     body = main
     return body - down(e)(insert_holes)
