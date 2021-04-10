@@ -10,12 +10,12 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 32
+SEGMENTS = 128
 
 e = 0.001
 
 def assembly():
-    free_h = 11
+    free_h = 9
     cyl1 = cylinder(d = 8.5, h = free_h)
     cut = ccube(10, 10, 4)
     wi = 5
