@@ -6,7 +6,7 @@ import sys
 import re
 import math
 
-# Assumes SolidPython is in site-packages or elsewhwere in sys.path
+# Assumes SolidPython is in site-packages or elsewhere in sys.path
 from solid import *
 from solid.utils import *
 from utils import *
@@ -23,7 +23,7 @@ plate_h = 3.5
 dh = 155/2
 
 def mhole(x, y):
-    return trans(x*dh, y*dh, 0.5, cylinder(d = 15, h = 4))
+    return trans(x*dh, y*dh, 1, cylinder(d = 15.5, h = 4))
 
 def assembly():
     tube = cylinder(d = tube_od, h = tube_height) - hole()(down(1)(cylinder(d = tube_id, h = tube_height+2)))
