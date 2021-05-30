@@ -83,7 +83,7 @@ def wemos_holder():
     return pod + trans(-1, 0, 0, frame_outer - frame_inner - frame_cut) \
         - sw_hdrhole - sw_housinghole - pwr_wirehole - pwr_plughole
 
-
+# Depression for switch mode power supply
 def smps():
     w = 17
     l = 22
@@ -94,9 +94,12 @@ def smps():
     return trans(8, filler_offset - dia/2 - h, lid_w/2, rot(90, 0, 180, outer - hole()(inner)))
 
 def shell():
+    # Hollow cylinder
     outer = cylinder(d = dia, h = lid_w)
     inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2))
+    # Remove part of the cylinder that we don't need
     cutter = trans(0, dia/2, -1, ccube(dia + 2, dia, lid_w + 2))
+    # Make round corners
     rounder_cube = cube([lid_th + 2, corner_r, corner_r])
     rounder_cyl = trans(-1, 0, 0, rot(0, 90, 0, cylinder(r = corner_r, h = lid_th + 4)))
     rounder = rounder_cube - rounder_cyl
@@ -106,18 +109,21 @@ def shell():
     # Inner slit at edges
     slit1 = trans(dia/2 - 2, adj, -1, ccube(2, 2.5, lid_w + 2))
     slit2 = trans(-(dia/2 - 2), adj, -1, ccube(2, 2.5, lid_w + 2))
-    filler_h = wm_w+4
     # Block for screw hole
+    filler_h = wm_w+4
     filler = up((lid_w - filler_h)/2)(cylinder(d = dia - 2*lid_th, h = filler_h) -
                                       trans(-dia/2, -dia/2 + filler_offset, -2, cube([dia, dia, lid_w+4])))
     screwhole = trans(0, -dia/2 + 4.8, -lid_w/2, cylinder(d = 4.5, h = 2*lid_w))
+    # LED hole
     led_x = dia/2 - 5
     ledhole = trans(dia/2 - 5, led_y, 30, rot(90, 0, 90, cylinder(d = 5, h = 10)))
     ledtube = trans(dia/2 - 4, led_y, 30, rot(90, 0, 90, cylinder(d = 7, h = 4)))
     return outer - inner - cutter - rounder1 - rounder2 - slit1 - slit2 + filler - screwhole + ledtube - ledhole
 
 def assembly():
-    return wemos_holder() #shell() + smps() #
+    part1 = shell() + smps()
+    part2 = trans(-20, 10, lid_w/2, rot(180+90, 0, 90, wemos_holder()))
+    return wemos_holder() # part1 + part2
 
 if __name__ == '__main__':
     a = assembly()
