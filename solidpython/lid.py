@@ -31,20 +31,29 @@ cutout_offset = -1 # Offset from center
 wm_l = 34.5
 wm_w = 25.5
 wm_th = 2
+wm_usb_offset = 1 # USB connector is not centered
 
 filler_offset = 10
 
 led_y = -5
 
 def pod():
-    pod_outer = trans(-pod_x, -pod_h, (lid_w - pod_ow)/2, cube([dia/2, pod_h, pod_ow]))
-    pod_th = (pod_ow - pod_iw)/2
-    pod_inner = trans(-pod_x-pod_th, -pod_h+pod_th, (lid_w - pod_iw)/2, cube([dia/2, pod_h, pod_iw]))
+    pod_l = 15
+    pod_extra_w = 5
+    pod_h = 12
+    wt = 2
+    pod_outer = roundccube(pod_l, wm_w + pod_extra_w, pod_h, 1.5)
+    usb_w = 12
+    usb_h = 8
+    usb_hole = ccube(pod_l + 5, usb_w, usb_h)
+    pod = trans(-(wm_l + 2*wt + pod_l)/2, 0, -pod_h/2, down(1)(pod_outer) - trans(1, wm_usb_offset, (pod_h - usb_h)/2, hole()(usb_hole)))
     plughole = trans(dia/2, led_y, 10, ccube(5, 4.7, 6))
     plugtube = trans(dia/2 - 4, led_y, 10-1.5, ccube(5, 4.7+3, 6+3))
-    frame_inner = trans(-wm_l/2 + 8, -(pod_h - 2.5), (lid_w-wm_w)/2, cube([wm_l, 5, wm_w]))
-    frame_outer = trans(-wm_l/2 + 6, -(pod_h - 2.5), (lid_w-(wm_w+2*wm_th))/2, cube([wm_l+wm_th, 3, wm_w+2*wm_th]))
-    return pod_outer - pod_inner + plugtube - plughole + frame_outer - frame_inner
+    es = .5
+    frame_inner = ccube(wm_l+es, wm_w+es, wm_th+e)
+    frame_outer = ccube(wm_l + 2*wt, wm_w + 2*wt, 2*wm_th)
+    frame_cut = trans(-wm_l/2, wm_usb_offset, -wm_th, ccube(5, 12, wm_th+2))
+    return pod + frame_outer - frame_inner - frame_cut #pod_outer - pod_inner + plugtube - plughole + 
 
 def smps():
     w = 17
@@ -68,7 +77,7 @@ def shell():
     # Inner slit at edges
     slit1 = trans(dia/2 - 2, adj, -1, ccube(2, 2.5, lid_w + 2))
     slit2 = trans(-(dia/2 - 2), adj, -1, ccube(2, 2.5, lid_w + 2))
-    filler_h = wm_w+2*wm_th
+    filler_h = wm_w+4
     # Block for screw hole
     filler = up((lid_w - filler_h)/2)(cylinder(d = dia - 2*lid_th, h = filler_h) -
                                       trans(-dia/2, -dia/2 + filler_offset, -2, cube([dia, dia, lid_w+4])))
@@ -79,7 +88,7 @@ def shell():
     return outer - inner - cutter - rounder1 - rounder2 - slit1 - slit2 + filler - screwhole + ledtube - ledhole
 
 def assembly():
-    return shell() + smps() #
+    return pod() #shell() + smps() #
 
 if __name__ == '__main__':
     a = assembly()
