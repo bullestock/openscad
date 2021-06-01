@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 32#256
+SEGMENTS = 64
 
 e = 0.001
 dia = 59
@@ -41,7 +41,7 @@ pod_l = 15
 pod_l2 = 22
 pod_extra_w = 5
 pod_h = 12
-pod_h2 = 10
+pod_h2 = 7
 wt = 2
 
 def pod():
@@ -56,8 +56,8 @@ def pod():
     # Hole for power plug (JST PH)
     pwr_plug_l = 5
     pwr_plug_x = -(wm_l + pod_l)/2 - pwr_plug_l - 1
-    pwr_plug_y = 11
-    pwr_plug_z = -4
+    pwr_plug_y = 10
+    pwr_plug_z = -12
     es = .5 # empirics
     pwr_plug_w = 4.7 + es
     pwr_plug_h = 6 + es
@@ -66,16 +66,18 @@ def pod():
     pwr_plughole = trans(pwr_plug_x - 1, pwr_plug_y, pwr_plug_z, ccube(pwr_plug_l + 1, pwr_plug_w, pwr_plug_h))
     pwr_plugtube = trans(pwr_plug_x, pwr_plug_y, pwr_plug_z-1.5, ccube(pwr_plug_l, pwr_plug_w+3, pwr_plug_h+3))
 
-    # Hole for door switch (2.54 mm header)
+    # Hole for door switches (2.54 mm header)
     sw_plug_x = -(wm_l + 2*wt + pod_l - 2)/2
-    sw_plug_y = -11
+    sw_plug_y = -10
     sw_plug_l = pod_l - 2
-    sw_plug_z = -4
-    es = 0 # empirics
-    sw_hdr_w = 2.5 + es
-    sw_hdr_h = 5.02 + es
-    sw_housing_w = 1+2.6 + es
-    sw_housing_h = 1+2*2.6 + es
+    sw_plug_z = -12
+    es = 0.6 # empirics
+    n = 2
+    sw_hdr_w = n*2.5 + es
+    sw_hdr_h = n*2.5 + es
+    es = 0.5 # empirics
+    sw_housing_w = n*2.6 + es
+    sw_housing_h = n*2.6 + es
     sw_housing_l = 10
     sw_hdrhole = trans(sw_plug_x - 1, sw_plug_y, sw_plug_z, ccube(sw_plug_l + 10, sw_hdr_w, sw_hdr_h))
     sw_housinghole = trans(sw_plug_x - (sw_plug_l - sw_housing_l) - 1, sw_plug_y, sw_plug_z - (sw_housing_h - sw_hdr_h)/2, ccube(sw_housing_l, sw_housing_w, sw_housing_h))
@@ -102,7 +104,7 @@ def smps():
 
 def shell_outer():
     # Hollow cylinder
-    outer = cylinder(d = dia, h = lid_w)
+    outer = cylinder(d = dia, h = lid_w, segments = 256)
     # Remove part of the cylinder that we don't need
     cutter = trans(0, dia/2, -1, ccube(dia + 2, dia, lid_w + 2))
     # Make round corners
@@ -131,17 +133,19 @@ def shell_block():
     return filler - screwhole
 
 def shell_inner():
-    inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2))
+    inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2, segments = 256))
     return inner
 
 def assembly():
     sh = shell_outer()
     wmh = wemos_holder()
     part1 = sh + smps() - shell_inner() + shell_block()
-    part2 = trans(-20, -10, lid_w/2, rot(180+90, 0, 90, wmh))
-    pod_t = trans(-20, -10, lid_w/2, rot(180+90, 0, 90, pod())) - shell_inner()
-    return pod_t + part2
-    #return part1 + part2 + pod_t
+    wemos_offset_x = -15
+    wemos_offset_y = -15
+    part2 = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, wmh))
+    pod_t = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, pod())) - shell_inner()
+    #return pod_t + part2
+    return part1 + part2 + pod_t
 
 if __name__ == '__main__':
     a = assembly()
