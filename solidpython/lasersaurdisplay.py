@@ -31,10 +31,10 @@ def wemos(x, y):
 
 def oled(x, y, z, a, negative = False):
     extra = 5 if negative else 0
-    return trans(x, y, z,
-                 rot(90 + a, 0, 0, ccube(36, 34.3, 4 + extra) +
-                     trans(0, 15.5, 4, ccube(10, 2.5, 10)) +
-                     trans(0, 2, -4 if negative else -1, ccube(32, 18, 4 + extra))))
+    return color(c = 'blue')(trans(x, y, z,
+                                   rot(90 + a, 0, 0, ccube(36, 34.3, 4 + extra) +
+                                       trans(0, 15.5, 4, ccube(10, 2.5, 10)) +
+                                       trans(0, 2, -4 if negative else -1, ccube(32, 18, 4 + extra)))))
 
 def front(x, y, z, a):
     s = sphere(r = cr)
@@ -50,17 +50,19 @@ def front(x, y, z, a):
                      trans(0, 2, -2, ccube(32, 18, 2*cr+2))))
     
 def assembly():
-    w = wemos(0, 0)
+    print = True  # Print
+    print = False # Visualize
+    w = wemos(0, -10)
     disp_y = 12
-    disp_z = 10
-    o = oled(0, disp_y, disp_z, tilt, True)
+    disp_z = 3
+    o = oled(0, disp_y, disp_z, tilt, print)
     f = front(0, disp_y - 1, disp_z, tilt)
     # Visualization
     a = w + f + o
     # With cutout for OLED
-    a = w + f - o
+    #a = w + f - o
     # Test of OLED fit
-    a = f - o
+    #a = f - o
     return a
 
 if __name__ == '__main__':
