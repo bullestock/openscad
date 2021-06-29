@@ -31,7 +31,7 @@ def roundccube(length, width, height, radius):
 
 # Cube, rounded in x/y/z, at (0, 0)
 def roundcube(length, width, height, radius):
-    return translate([-length/2, -width/2, 0])(roundcube(length, width, height, radius))
+    return translate([length/2, width/2, 0])(roundccube(length, width, height, radius))
 
 # Cube centered around origin
 def ccube(w, l, h):
