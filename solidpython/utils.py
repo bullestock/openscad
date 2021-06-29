@@ -12,8 +12,8 @@ def roundxycube(length, width, height, radius):
     c4 = trans(-xo, -yo, 0, c)
     return hull()(c1 + c2 + c3 + c4)
 
-# Cube, rounded in x/y/z, at (0, 0)
-def roundcube(length, width, height, radius):
+# Cube, rounded in x/y/z, centered in x/y
+def roundccube(length, width, height, radius):
     s = sphere(r = radius)
     xo = length/2 - radius
     yo = width/2 - radius
@@ -29,8 +29,8 @@ def roundcube(length, width, height, radius):
     s8 = trans(-xo, -yo, zo, s)
     return hull()(s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8)
 
-# Cube, rounded in x/y/z, centered in x/y
-def roundccube(length, width, height, radius):
+# Cube, rounded in x/y/z, at (0, 0)
+def roundcube(length, width, height, radius):
     return translate([-length/2, -width/2, 0])(roundcube(length, width, height, radius))
 
 # Cube centered around origin
