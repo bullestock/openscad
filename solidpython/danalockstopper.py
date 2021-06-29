@@ -10,14 +10,14 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 8#32
+SEGMENTS = 32
 
 e = 0.001
 
 def assembly():
     w = 10 - .5
-    rod = roundcube(w, w, 40, 2)
-    head = roundcube(20, 20, 5, 2)
+    rod = roundccube(w, w, 40, 2)
+    head = roundccube(20, 20, 5, 2)
     return rod + trans(0, 0, 40 - 2, head)
 
 if __name__ == '__main__':
