@@ -3,16 +3,32 @@ from solid.utils import *
 
 # Cube, rounded in x/y, at (0, 0)
 def roundxycube(length, width, height, radius):
-    rh = radius
-    ch = 0.1
-    return translate([rh, rh, 0])(minkowski()(cube([length - 2*radius, width - 2*radius, height - ch]),
-                                               cylinder(r = radius, h = ch)))
+    c = cylinder(r = radius, h = height)
+    xo = length/2 - radius
+    yo = width/2 - radius
+    c1 = trans(xo, yo, 0, c)
+    c2 = trans(-xo, yo, 0, c)
+    c3 = trans(xo, -yo, 0, c)
+    c4 = trans(-xo, -yo, 0, c)
+    return hull()(c1 + c2 + c3 + c4)
+
 # Cube, rounded in x/y/z, at (0, 0)
 def roundcube(length, width, height, radius):
-    rh = radius
-    ch = 0.1
-    return translate([rh, rh, rh])(minkowski()(cube([length - 2*radius, width - 2*radius, height - ch]),
-                                               sphere(r = radius)))
+    s = sphere(r = radius)
+    xo = length/2 - radius
+    yo = width/2 - radius
+    zo = radius
+    s1 = trans(xo, yo, zo, s)
+    s2 = trans(-xo, yo, zo, s)
+    s3 = trans(xo, -yo, zo, s)
+    s4 = trans(-xo, -yo, zo, s)
+    zo = height - radius
+    s5 = trans(xo, yo, zo, s)
+    s6 = trans(-xo, yo, zo, s)
+    s7 = trans(xo, -yo, zo, s)
+    s8 = trans(-xo, -yo, zo, s)
+    return hull()(s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8)
+
 # Cube, rounded in x/y/z, centered in x/y
 def roundccube(length, width, height, radius):
     return translate([-length/2, -width/2, 0])(roundcube(length, width, height, radius))
