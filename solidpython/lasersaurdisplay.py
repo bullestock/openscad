@@ -36,18 +36,14 @@ def oled(x, y, z, a, negative = False):
                                        trans(0, 15.5, 4, ccube(10, 2.5, 10)) +
                                        trans(0, 2, -4 if negative else -1, ccube(32, 18, 4 + extra)))))
 
-def front(x, y, z, a):
-    s = sphere(r = cr)
-    xo = width/2 - cr/2
-    yo = disp_height/2 - cr/2
-    s1 = trans(xo, yo, 0, s)
-    s2 = trans(-xo, yo, 0, s)
-    s3 = trans(xo, -yo, 0, s)
-    s4 = trans(-xo, -yo, 0, s)
-    return trans(x, y, z,
-                 rot(90 + a, 0, 0,
-                     hull()(s1 + s2 + s3 + s4) -
-                     trans(0, 2, -2, ccube(32, 18, 2*cr+2))))
+def front(x, y, z, a, print = True):
+    c = trans(0, 0, -cr, roundccube(width, disp_height, cr/4, cr));
+    if not print:
+        c = c - trans(0, 2, -2, ccube(32, 18, 2*cr+2))
+    f = trans(x, y, z,
+              rot(90 + a, 0, 0, c))                  
+    return f
+                     
     
 def assembly():
     print = True  # Print
@@ -56,9 +52,12 @@ def assembly():
     disp_y = 12
     disp_z = 3
     o = oled(0, disp_y, disp_z, tilt, print)
-    f = front(0, disp_y - 1, disp_z, tilt)
+    f = front(0, disp_y - 1, disp_z, tilt, print)
     # Visualization
-    a = w + f + o
+    if not print:
+        a = w + f + o
+    else:
+        a = f - o
     # With cutout for OLED
     #a = w + f - o
     # Test of OLED fit
