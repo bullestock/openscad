@@ -26,9 +26,8 @@ tilt = 30
 width = 50
 disp_height = 40
 
-def wemos(x, y):
-    # 'turns' must match h
-    return trans(x, y, 0, rot(90, 0, 0, esp.WemosD1M()))
+def wemos(x, y, z):
+    return trans(x, y, z, rot(90, 0, 0, esp.WemosD1M()))
 
 def oled(x, y, z, a, negative = False):
     extra = 5 if negative else 0
@@ -67,14 +66,17 @@ def back_s(x, y, z, height):
     
 def assembly():
     print = True  # Print
-    print = False # Visualize
-    w = wemos(0, -10)
+    #print = False # Visualize
+    d1 = wemos(0, -10, -2)
+    wemos_holder = trans(0, -10, 9, roundccube(32, 6, 8, 1) - ccube(20.5, 8, 10)) - d1
     disp_y = 12
     disp_z = 3
     o = oled(0, disp_y, disp_z, tilt, print)
     #f = front_s(
     f_s = front_s(0, disp_y - 1, disp_z, tilt)
-    f = hull()(f_s) - front_cuts(0, disp_y - 1, disp_z, tilt, print)
+    f = hull()(f_s)
+    if not print:
+        f = f - front_cuts(0, disp_y - 1, disp_z, tilt, print)
     top_depth = 25
     top_y = disp_y - top_depth - disp_height/2*math.sin(90 + tilt)
     top_z = disp_z + disp_height/2*math.cos(90+tilt)
@@ -85,17 +87,15 @@ def assembly():
     b = hull()(b_s)
     side1 = hull()(f_s[0] + f_s[6] + b_s[0] + b_s[4])
     side2 = hull()(f_s[1] + f_s[7] + b_s[1] + b_s[5])
+    a = wemos_holder
     # Visualization
     if not print:
-        a = w + f + o
+        a = a + d1 + f + o
     else:
-        a = f - o
+        a = a + f - o
     # With cutout for OLED
-    #a = w + f - o
-    # Test of OLED fit
-    #a = f - o
+    #a = d1 + f - o
     a = a + t + b + side1 + side2
-    #a = side2
     return a
 
 if __name__ == '__main__':
