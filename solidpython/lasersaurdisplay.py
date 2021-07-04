@@ -24,7 +24,7 @@ cr = 2
 tilt = 30
 # Width
 width = 50
-disp_height = 40
+disp_height = 48
 
 def wemos(x, y, z):
     return trans(x, y, z, rot(90, 0, 0, esp.WemosD1M()))
@@ -96,7 +96,13 @@ def assembly():
     # With cutout for OLED
     #a = d1 + f - o
     a = a + t + b + side1 + side2
-    return a
+    cutoff = trans(-width, -width, -65, cube([2*width, 2*width, width]))
+    cw = width - 5
+    cd = disp_height - 5
+    ch = 10
+    cth = 3
+    chimney = trans(0, 0, -25, ccube(cw, cd, ch) - down(1)(ccube(cw - 2*cth, cd - 2*cth, ch+2)))
+    return a - cutoff + chimney
 
 if __name__ == '__main__':
     a = assembly()
