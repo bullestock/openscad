@@ -95,7 +95,7 @@ def assembly():
         a = a + f - o
     # With cutout for OLED
     #a = d1 + f - o
-    a = a + t# + b + side1 + side2
+    a = a + t + b + side1 + side2
     cutoff = trans(-width, -width, -65, cube([2*width, 2*width, width]))
     cw = width - 5
     cd = disp_height - 5
