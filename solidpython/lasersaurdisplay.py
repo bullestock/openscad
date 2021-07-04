@@ -68,7 +68,7 @@ def assembly():
     print = True  # Print
     #print = False # Visualize
     d1 = wemos(0, -10, -2)
-    wemos_holder = trans(0, -10, 9, roundccube(32, 6, 8, 1) - ccube(20.5, 8, 10)) - d1
+    wemos_holder = up(4)(trans(0, -10, 9, roundccube(32, 6, 8, 1) - ccube(20.5, 8, 10)) - d1)
     disp_y = 12
     disp_z = 3
     o = oled(0, disp_y, disp_z, tilt, print)
@@ -95,7 +95,7 @@ def assembly():
         a = a + f - o
     # With cutout for OLED
     #a = d1 + f - o
-    a = a + t + b + side1 + side2
+    a = a + t# + b + side1 + side2
     cutoff = trans(-width, -width, -65, cube([2*width, 2*width, width]))
     cw = width - 5
     cd = disp_height - 5
