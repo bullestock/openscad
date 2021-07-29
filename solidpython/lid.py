@@ -19,10 +19,6 @@ lid_w = 36
 corner_r = 3
 lid_th = 2
 
-pod_iw = 28
-pod_ow = 32
-pod_x = 2
-
 cutout_h = 7
 cutout_w = 12
 cutout_offset = -1 # Offset from center
@@ -45,10 +41,10 @@ pod_extra_w = 5
 pod_h = 14
 pod_h2 = 11
 wt = 2
+outer_w = wm_w + pod_extra_w
 
 def pod():
     r = 1.5
-    outer_w = wm_w + pod_extra_w
     pod_outer = (trans(0, 0, pod_h2, roundcube(pod_l + pod_l2, outer_w, pod_h, r)) +
                  trans(0, 0, 0, roundcube(pod_l + pod_l3, outer_w, pod_h2 + 2*r, r)))
     inner_w = pod_h + pod_h2 - 4*wt
@@ -90,7 +86,15 @@ def pod():
     sw_hdrhole = trans(sw_plug_x, sw_plug_y, sw_plug_z, cube([sw_plug_l, sw_hdr_w, sw_hdr_h]))
     sw_housinghole = trans(sw_plug_x - (sw_plug_l - sw_housing_l) - 1, sw_plug_y, sw_plug_z - (sw_housing_h - sw_hdr_h)/2, cube([sw_housing_l, sw_housing_w, sw_housing_h]))
     sw_hdrtube = trans(sw_plug_x, sw_plug_y, sw_plug_z-r, cube([sw_plug_l, sw_hdr_w+3, sw_hdr_h+3]))
-    holes = sw_hdrhole + sw_housinghole + pwr_wirehole + pwr_plughole + pod_inner
+    # LED hole
+    led_x = pod_l
+    led_y = 15
+    led_z = 8
+    led_l = 50
+    ledhole = trans(led_x, led_y, led_z, rot(90, 0, 90, cylinder(d = 5, h = 50)))
+    ledtube = trans(led_x + 2, led_y, led_z, rot(90, 0, 90, cylinder(d = 7, h = 5)))
+
+    holes = sw_hdrhole + sw_housinghole + pwr_wirehole + pwr_plughole + pod_inner + ledhole + ledtube
 
     wmh = rot(0, 0, 180, wemos_holder())
     part2 = trans(wemos_offset_x, wemos_offset_y, wemos_offset_z, wmh)
@@ -132,11 +136,7 @@ def shell_outer():
     # Inner slit at edges
     slit1 = trans(dia/2 - 2, adj, -1, ccube(2, 2.5, lid_w + 2))
     slit2 = trans(-(dia/2 - 2), adj, -1, ccube(2, 2.5, lid_w + 2))
-    # LED hole
-    led_x = dia/2 - 5
-    ledhole = trans(dia/2 - 5, led_y, 30, rot(90, 0, 90, cylinder(d = 5, h = 10)))
-    ledtube = trans(dia/2 - 4, led_y, 30, rot(90, 0, 90, cylinder(d = 7, h = 4)))
-    return outer - cutter - rounder1 - rounder2 - slit1 - slit2 + ledtube - ledhole
+    return outer - cutter - rounder1 - rounder2 - slit1 - slit2
 
 def shell_block():
     # Block for screw hole
@@ -154,11 +154,12 @@ def shell_inner():
 def assembly():
     sh = shell_outer()
     part1 = sh + smps() - shell_inner() + shell_block()
-    wemos_offset_x = -15
-    wemos_offset_y = -15
-    pod_t = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, pod()))
-    return pod()
-    #return part1 + pod_t - shell_inner()
+    pod_offset_x = -3.2
+    wemos_offset_y = -12
+    pod_t = trans(pod_offset_x, wemos_offset_y,
+                  (lid_w - outer_w)/2,
+                  rot(180+90, 180, 90, pod()))
+    return part1 + pod_t
 
 if __name__ == '__main__':
     a = assembly()
