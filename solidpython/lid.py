@@ -11,6 +11,7 @@ from solid.utils import *
 from utils import *
 
 SEGMENTS = 64
+SEGMENTS_SHELL = 256
 
 e = 0.001
 dia = 59
@@ -20,7 +21,6 @@ lid_th = 2
 
 pod_iw = 28
 pod_ow = 32
-pod_h = 22
 pod_x = 2
 
 cutout_h = 7
@@ -37,20 +37,21 @@ filler_offset = 10
 
 led_y = -5
 
-pod_l = 15
+pod_extra_l = 2
+pod_l = 15 + pod_extra_l
 pod_l2 = 22
 pod_extra_w = 5
-pod_h = 12
+pod_h = 20
 pod_h2 = 7
 wt = 2
 
 def pod():
-    pod_outer = trans(pod_l2/2, 0, -pod_h2, roundccube(pod_l + pod_l2, wm_w + pod_extra_w, pod_h + pod_h2, 1.5))
+    pod_outer = trans(pod_l2/2 + pod_extra_l, 0, -pod_h2/2, roundccube(pod_l + pod_l2, wm_w + pod_extra_w, pod_h + pod_h2, 1.5))
     inner_w = pod_h + pod_h2 - 4*wt
-    pod_inner = trans(-8, 0, -inner_w-1, roundccube(pod_l2, wm_w, inner_w, 1.5))
+    pod_inner = trans(-8, 0, -inner_w + pod_h2, roundccube(pod_l2, wm_w, inner_w, 1.5))
     usb_w = 12
     usb_h = 8
-    usb_hole = ccube(pod_l + 5, usb_w, usb_h)
+    usb_hole = trans(0, 0, 6, ccube(pod_l + 5, usb_w, usb_h))
     pod = trans(-(wm_l + 2*wt + pod_l)/2, 0, -pod_h/2, down(1)(pod_outer) - trans(1, wm_usb_offset, (pod_h - usb_h)/2, hole()(usb_hole)))
 
     # Hole for power plug (JST PH)
@@ -71,7 +72,7 @@ def pod():
     sw_plug_y = -10
     sw_plug_l = pod_l - 2
     sw_plug_z = -12
-    es = 0.6 # empirics
+    es = 1 # empirics
     n = 2
     sw_hdr_w = n*2.5 + es
     sw_hdr_h = n*2.5 + es
@@ -87,10 +88,13 @@ def pod():
 
 def wemos_holder():
     es = .1 # empirics
-    frame_inner = ccube(wm_l+es, wm_w+es, wm_th+e)
+    frame_inner = trans(0, 0, -5, ccube(wm_l+es, wm_w+es, wm_th+e+5))
     frame_outer = roundccube(wm_l + 2*wt, wm_w + 2*wt, 2*wm_th, 1)
     frame_cut = trans(-wm_l/2, wm_usb_offset, -wm_th, ccube(5, 12, wm_th+2))
-    return trans(-1, 0, 0, frame_outer - hole()(frame_inner + frame_cut))
+    groove_w = 3
+    groove = trans(-wm_l/2, 0, groove_w/2, rot(90, 0, 90, cylinder(d = groove_w, h = wm_l)))
+    grooves = trans(0, wm_w/2 - groove_w/2, 0, groove) + trans(0, -(wm_w/2 - groove_w/2), 0, groove)
+    return trans(-1, 0, pod_h2 + 1, frame_outer - hole()(frame_inner + frame_cut + grooves))
 
 # Depression for switch mode power supply
 def smps():
@@ -104,7 +108,7 @@ def smps():
 
 def shell_outer():
     # Hollow cylinder
-    outer = cylinder(d = dia, h = lid_w, segments = 256)
+    outer = cylinder(d = dia, h = lid_w, segments = SEGMENTS_SHELL)
     # Remove part of the cylinder that we don't need
     cutter = trans(0, dia/2, -1, ccube(dia + 2, dia, lid_w + 2))
     # Make round corners
@@ -144,7 +148,6 @@ def assembly():
     wemos_offset_y = -15
     part2 = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, wmh))
     pod_t = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, pod())) - shell_inner()
-    #return pod_t + part2
     return part1 + part2 + pod_t
 
 if __name__ == '__main__':
