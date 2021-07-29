@@ -10,8 +10,8 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 64
-SEGMENTS_SHELL = 256
+SEGMENTS = 16#64
+SEGMENTS_SHELL = SEGMENTS*4
 
 e = 0.001
 dia = 59
@@ -37,41 +37,48 @@ filler_offset = 10
 
 led_y = -5
 
-pod_extra_l = 2
-pod_l = 15 + pod_extra_l
+# Pod
+pod_l = 17
 pod_l2 = 22
+pod_l3 = 11
 pod_extra_w = 5
-pod_h = 20
-pod_h2 = 7
+pod_h = 14
+pod_h2 = 11
 wt = 2
 
 def pod():
-    pod_outer = trans(pod_l2/2 + pod_extra_l, 0, -pod_h2/2, roundccube(pod_l + pod_l2, wm_w + pod_extra_w, pod_h + pod_h2, 1.5))
+    r = 1.5
+    outer_w = wm_w + pod_extra_w
+    pod_outer = (trans(0, 0, pod_h2, roundcube(pod_l + pod_l2, outer_w, pod_h, r)) +
+                 trans(0, 0, 0, roundcube(pod_l + pod_l3, outer_w, pod_h2 + 2*r, r)))
     inner_w = pod_h + pod_h2 - 4*wt
-    pod_inner = trans(-8, 0, -inner_w + pod_h2, roundccube(pod_l2, wm_w, inner_w, 1.5))
+    pod_inner = trans(-r, pod_extra_w/2, 3.5, roundcube(pod_l2, wm_w, inner_w, r))
     usb_w = 12
     usb_h = 8
-    usb_hole = trans(0, 0, 6, ccube(pod_l + 5, usb_w, usb_h))
-    pod = trans(-(wm_l + 2*wt + pod_l)/2, 0, -pod_h/2, down(1)(pod_outer) - trans(1, wm_usb_offset, (pod_h - usb_h)/2, hole()(usb_hole)))
+    wemos_offset_x = wm_l/2 - 16
+    wemos_offset_y = outer_w/2
+    wemos_offset_z = 9-1
+    usb_hole = trans(wm_l - wemos_offset_x - 4, outer_w/2, 12, ccube(pod_l2, usb_w, usb_h))
+    pod = pod_outer - trans(1, -wm_usb_offset, (pod_h - usb_h)/2, hole()(usb_hole))
 
     # Hole for power plug (JST PH)
     pwr_plug_l = 5
-    pwr_plug_x = -(wm_l + pod_l)/2 - pwr_plug_l - 1
-    pwr_plug_y = 10
-    pwr_plug_z = -12
+    pwr_plug_x = pod_l + pod_l3
+    pwr_plug_y = 25
+    pwr_plug_z = 3
     es = .5 # empirics
     pwr_plug_w = 4.7 + es
     pwr_plug_h = 6 + es
     pwr_wire_sz = 4
-    pwr_wirehole = trans(pwr_plug_x + 4, pwr_plug_y, pwr_plug_z + (pwr_plug_h - pwr_wire_sz)/2, ccube(pod_l + 3, pwr_wire_sz, pwr_wire_sz))
+    pwr_wirehole = trans(pwr_plug_x - 10, pwr_plug_y, pwr_plug_z + (pwr_plug_h - pwr_wire_sz)/2, ccube(pod_l + 10, pwr_wire_sz, pwr_wire_sz))
     pwr_plughole = trans(pwr_plug_x - 1, pwr_plug_y, pwr_plug_z, ccube(pwr_plug_l + 1, pwr_plug_w, pwr_plug_h))
-    pwr_plugtube = trans(pwr_plug_x, pwr_plug_y, pwr_plug_z-1.5, ccube(pwr_plug_l, pwr_plug_w+3, pwr_plug_h+3))
+    pwr_plugtube = trans(pwr_plug_x, pwr_plug_y, pwr_plug_z-r, ccube(pwr_plug_l, pwr_plug_w+3, pwr_plug_h+3))
 
     # Hole for door switches (2.54 mm header)
-    sw_plug_x = -(wm_l + 2*wt + pod_l - 2)/2
-    sw_plug_y = -10
-    sw_plug_l = pod_l - 2
-    sw_plug_z = -12
+    sw_plug_x = pod_l
+    sw_plug_y = 2.5
+    sw_plug_l = pod_l + pod_l3
+    sw_plug_z = 3
     es = 1 # empirics
     n = 2
     sw_hdr_w = n*2.5 + es
@@ -80,11 +87,15 @@ def pod():
     sw_housing_w = n*2.6 + es
     sw_housing_h = n*2.6 + es
     sw_housing_l = 10
-    sw_hdrhole = trans(sw_plug_x - 1, sw_plug_y, sw_plug_z, ccube(sw_plug_l + 10, sw_hdr_w, sw_hdr_h))
-    sw_housinghole = trans(sw_plug_x - (sw_plug_l - sw_housing_l) - 1, sw_plug_y, sw_plug_z - (sw_housing_h - sw_hdr_h)/2, ccube(sw_housing_l, sw_housing_w, sw_housing_h))
-    sw_hdrtube = trans(sw_plug_x, sw_plug_y, sw_plug_z-1.5, ccube(sw_plug_l, sw_hdr_w+3, sw_hdr_h+3))
-    holes = hole()(sw_hdrhole + sw_housinghole + pwr_wirehole + pwr_plughole + pod_inner)
-    return pod - holes
+    sw_hdrhole = trans(sw_plug_x, sw_plug_y, sw_plug_z, cube([sw_plug_l, sw_hdr_w, sw_hdr_h]))
+    sw_housinghole = trans(sw_plug_x - (sw_plug_l - sw_housing_l) - 1, sw_plug_y, sw_plug_z - (sw_housing_h - sw_hdr_h)/2, cube([sw_housing_l, sw_housing_w, sw_housing_h]))
+    sw_hdrtube = trans(sw_plug_x, sw_plug_y, sw_plug_z-r, cube([sw_plug_l, sw_hdr_w+3, sw_hdr_h+3]))
+    holes = sw_hdrhole + sw_housinghole + pwr_wirehole + pwr_plughole + pod_inner
+
+    wmh = rot(0, 0, 180, wemos_holder())
+    part2 = trans(wemos_offset_x, wemos_offset_y, wemos_offset_z, wmh)
+
+    return pod - hole()(holes) + part2
 
 def wemos_holder():
     es = .1 # empirics
@@ -142,13 +153,12 @@ def shell_inner():
 
 def assembly():
     sh = shell_outer()
-    wmh = wemos_holder()
     part1 = sh + smps() - shell_inner() + shell_block()
     wemos_offset_x = -15
     wemos_offset_y = -15
-    part2 = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, wmh))
-    pod_t = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, pod())) - shell_inner()
-    return part1 + part2 + pod_t
+    pod_t = trans(wemos_offset_x, wemos_offset_y, lid_w/2, rot(180+90, 0, 90, pod()))
+    return pod()
+    #return part1 + pod_t - shell_inner()
 
 if __name__ == '__main__':
     a = assembly()
