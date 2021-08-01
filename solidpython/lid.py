@@ -117,8 +117,9 @@ def wemos_holder():
 
 # Depression for switch mode power supply
 def smps():
-    w = 17
-    l = 22
+    ex = .5 # Extra room
+    w = 17 + ex
+    l = 22 + ex
     h = 2
     wt = 1
     inner = ccube(w, l, h + e)
