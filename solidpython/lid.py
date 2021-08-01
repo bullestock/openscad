@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 16#64
+SEGMENTS = 64
 SEGMENTS_SHELL = SEGMENTS*4
 
 e = 0.001
@@ -109,7 +109,11 @@ def wemos_holder():
     groove_w = 3
     groove = trans(-wm_l/2, 0, groove_w/2, rot(90, 0, 90, cylinder(d = groove_w, h = wm_l)))
     grooves = trans(0, wm_w/2 - groove_w/2, 0, groove) + trans(0, -(wm_w/2 - groove_w/2), 0, groove)
-    return trans(-1, 0, pod_h2 + 1, frame_outer - hole()(frame_inner + frame_cut + grooves))
+    # Allow room for chips on back if not Pro version
+    cd = 7
+    chips = trans(0, 0, -1+1.5, ccube(wm_l - cd, wm_w - cd, 3))
+    a = frame_outer - hole()(frame_inner + frame_cut + grooves + chips)
+    return trans(-1, 0, pod_h2 + 1, a)
 
 # Depression for switch mode power supply
 def smps():
