@@ -18,18 +18,22 @@ hdx = 14.5*2.54
 hdy = 7.5*2.54
 wx = 42
 wy = 24
-hd = 2.5
+# Hole diameter
+hd = 2.1
+# PCB thickness
 pcb_th = 1.6
+# Base thickness
 base_th = 3
 
 def stud():
-    h1 = 3
+    h1 = 2.5
     h2 = 1.2*pcb_th
     sd = 1.2*hd
-    return (cylinder(d = 5, h = h1) +
-            up(h1)(cylinder(d = hd, h = h2)) +
-            hull()(up(h1+h2)(cylinder(d = hd, h = e)) +
-                   up(h1+h2+sd*0.4)(sphere(d = sd))))
+    a = (cylinder(d = 5, h = h1) +
+         up(h1)(cylinder(d = hd, h = h2)) +
+         hull()(up(h1+h2)(cylinder(d = hd, h = e)) +
+                up(h1+h2+sd*0.4)(sphere(d = sd))))
+    return a - up(h1+e)(ccube(0.5, 5, 5))
 
 def assembly():
     base = roundxycube(wx, wy, base_th, 2.5)
@@ -37,7 +41,7 @@ def assembly():
              trans(-hdx/2, hdy/2, 0, stud()) +
              trans(hdx/2, -hdy/2, 0, stud()) +
              trans(-hdx/2, -hdy/2, 0, stud()))
-    sd = 4
+    sd = 3
     screwhole = cylinder(d1 = sd, d2 = sd + 2*base_th, h = base_th + 2*e)
     return base + trans(0, 0, base_th, studs) - down(e)(screwhole)
 
