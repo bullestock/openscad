@@ -26,7 +26,7 @@ def assembly():
     bw = 40 # Base width
     stick = ccube(bw, ss, ss)
     # Upright part
-    hh = 26.2 # Hole height above plane
+    hh = 23.2 # Hole height above plane
     upright = hull()(trans(0, hh, 0, tuit) + trans(0, 0, 0, stick))
     # Horizontal part
     hl = 20
