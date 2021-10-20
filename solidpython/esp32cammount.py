@@ -36,7 +36,7 @@ def screwhole():
     return cylinder(d = 3.5, h = 2*dd1)
 
 def assembly():
-    ah = d/2+12
+    ah = d/2+15
     arm = down(dd1/2)(roundccube(dd1, dd1/2, ah, rr))
     brace = up(ah - dd1)(roundccube(dd1, b + 6*dh, dd1/2, rr))
     comp = 0.1 # Increase for tighter fit
