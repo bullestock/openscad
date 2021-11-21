@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 128
+SEGMENTS = 64#128
 
 eps = 0.001
 rr = 2
@@ -21,9 +21,10 @@ b = a + 4*wth
 c = 40.5
 d = c + 4*wth
 e = 0
-f = 8
+f = 8.5
 g = 12
-h = 1
+# Height of square part of camera
+h = 1.7
 j = 8.5
 k = 5
 m = 2.5
@@ -38,13 +39,14 @@ def assembly():
     camcone = cylinder(d1 = g, d2 = f, h = e)
     cambox = ccube(j, j, m + 1)
     camcutout = camhole + camcone + up(h + e)(cambox)
+    cutout = trans(0, 0, 5, roundccube(15, a + 10, 10, 2))
     s1w = 5
     support1 = trans(-(c + s1w)/2 + s1w, 0, h + e + m - eps, ccube(s1w, a, 2))
     support = support1
     logo1 = rot(180, 0, 90, text('HAL', size = 9, font = 'Contour Generator', halign = 'center'))
     logo2 = rot(180, 0, 90, text('9K', size = 9, font = 'Contour Generator', halign = 'center'))
     logo = trans(-10, 0, -1, logo1 + trans(-10, 0, 0, logo2))
-    return base + up(h + e + m - eps)(rim) + support - trans(cho, 0, -2*eps, camcutout) - up(-0.5)(linear_extrude(height = 1)(logo))
+    return base + up(h + e + m - eps)(rim) + support - trans(cho, 0, -2*eps, camcutout) - cutout
 
 if __name__ == '__main__':
     a = assembly()
