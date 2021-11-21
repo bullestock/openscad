@@ -29,7 +29,7 @@ dd2 = 6.75
 # - height
 dh = 1.5
 
-arm_offset = .5
+arm_offset = .75
 
 def dimple(a):
     pad = roundccube(dd1, 3, dd1 + 2, 1)
@@ -39,19 +39,19 @@ def screwhole():
     return cylinder(d = 3.5, h = 2*dd1)
 
 def ridge():
-    s = sphere(d = 1)
+    s = sphere(d = 1.5)
     dd = 0.8
     return hull()(trans(0, dd, 0, s) + trans(0, dd, 10, s) + trans(0, -dd, 0, s) + trans(0, -dd, 10, s))
 
 def assembly():
     ah = d/2+15
-    arm = down(dd1*0.65)(roundccube(dd1, dd1/2, ah + 0.15*dd1, rr))
+    arm = down(dd1*0.65)(roundccube(dd1, dd1*.6, ah + 0.15*dd1, rr))
     brace = up(ah - dd1)(roundccube(dd1, b + 6*dh + 2*arm_offset, dd1/2, rr))
-    comp = 0.1 # Increase for tighter fit
+    comp = 0.2 # Increase for tighter fit
     print("b: %d" % b)
     dimples = trans(0, b/2 - comp, 0, dimple(180)) + trans(0, -b/2 + comp, 0, dimple(0))
-    spacer = rot(0, 90, 90, cylinder(d = dd1, h = dh + arm_offset))
-    spacers = trans(0, b/2, 0, spacer) + trans(0, -(b/2 + dh + arm_offset), 0, spacer)
+    spacer = rot(0, 90, 90, cylinder(d = dd1, h = dh + arm_offset + comp))
+    spacers = trans(0, b/2 - comp, 0, spacer) + trans(0, -(b/2 + dh + arm_offset), 0, spacer)
     arms = trans(0, b/2 + dh*2 + arm_offset, 0, arm) + trans(0, -(b/2 + dh*2 + arm_offset), 0, arm)
     ridge_offset = b/2 + arm_offset + 1
     ridges = trans(0, -ridge_offset, 4, ridge()) + trans(0, ridge_offset, 4, ridge())
