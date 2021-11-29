@@ -23,7 +23,7 @@ c = 40.5
 d = c + 4*wth
 gap = 0.3
 # Height of pinheaders above rim
-h = 14
+h = 14+5
 # Dimple
 dd1 = 9
 dd2 = 6.75
@@ -37,21 +37,24 @@ def dimple(a):
     part = hole()(rot(a, 90, 90, cylinder(d1 = dd1, d2 = dd2, h = dh))) + trans(0, offset, -dd1/2, pad)
     r = 10
     offset = -0.3
-    for angle in range(-2, 3):
-        d1 = trans(r * math.cos((angle + offset)/math.pi), 0, r * math.sin((angle + offset)/math.pi), dot())
+    y_off = 0.2
+    if a > 0:
+        y_off = -y_off
+    for angle in range(-4, 5):
+        d1 = trans(r * math.cos((angle + offset)/math.pi), y_off, r * math.sin((angle + offset)/math.pi), dot())
         part = part + d1
-        d1 = trans(-r * math.cos((angle - offset)/math.pi), 0, -r * math.sin((angle - offset)/math.pi), dot())
+        d1 = trans(-r * math.cos((angle - offset)/math.pi), y_off, -r * math.sin((angle - offset)/math.pi), dot())
         part = part + d1
     return part
 
 def dot():
     return sphere(r = 1.2)
 
-def wirehole():
-    d = 2.5
-    h = 4
-    c = rot(0, 90, 0, cylinder(d = d, h = 3*wth))
-    return hull()(trans(0, (h - d)/2, 0, c) + trans(0, -(h - d)/2, 0, c))
+def plughole():
+    w = 10.5+.4 # was .5
+    h = 5+.4 # was .5
+    c = ccube(3*wth, w, h)
+    return trans(0, 0, 0, c)
 
 def assembly():
     base = roundxycube(d, b, h + wth, rr)
@@ -59,7 +62,8 @@ def assembly():
     cutout2 = roundxycube(c, a, h, rr/2)
     print("b: %d" % b)
     dimples = trans(0, b/2 + eps, (h + 2*wth)/2, dimple(180)) + trans(0, -b/2 - eps, (h + 2*wth)/2, dimple(0))
-    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - 2*wth, 0, h - 3, wirehole())
+    cutter = ccube(20, 50, 5)
+    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter)
 
 if __name__ == '__main__':
     a = assembly()
