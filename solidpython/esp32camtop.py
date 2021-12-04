@@ -36,14 +36,18 @@ def dimple(a):
         offset = -offset
     part = hole()(rot(a, 90, 90, cylinder(d1 = dd1, d2 = dd2, h = dh))) + trans(0, offset, -dd1/2, pad)
     r = 10
-    offset = -0.3
     y_off = 0.2
     if a > 0:
         y_off = -y_off
-    for angle in range(-4, 5):
-        d1 = trans(r * math.cos((angle + offset)/math.pi), y_off, r * math.sin((angle + offset)/math.pi), dot())
-        part = part + d1
-        d1 = trans(-r * math.cos((angle - offset)/math.pi), y_off, -r * math.sin((angle - offset)/math.pi), dot())
+    n = 18
+    for i in range(0, n):
+        a = 2*math.pi*((i+0.5)/n)
+        f = 1
+        if i == 4:
+            f = 0.9
+        elif i == 3 or i == 5:
+            f = 0.95
+        d1 = trans(r * f * math.cos(a), y_off, r * f * math.sin(a), dot())
         part = part + d1
     return part
 
