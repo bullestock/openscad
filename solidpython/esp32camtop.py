@@ -66,8 +66,9 @@ def assembly():
     cutout2 = roundxycube(c, a, h, rr/2)
     print("b: %d" % b)
     dimples = trans(0, b/2 + eps, (h + 2*wth)/2, dimple(180)) + trans(0, -b/2 - eps, (h + 2*wth)/2, dimple(0))
-    cutter = ccube(20, 50, 5)
-    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter)
+    ch = 5
+    cutter = ccube(20, 50, ch)
+    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter) - trans(0, 0, -5, cutter)
 
 if __name__ == '__main__':
     a = assembly()
