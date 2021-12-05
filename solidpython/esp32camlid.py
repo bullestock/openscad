@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 16#64#128
+SEGMENTS = 64#128
 
 eps = 0.001
 rr = 2
@@ -31,6 +31,10 @@ m = 2.5
 # camhole offset
 cho = 10
 
+def ridge():
+    s = sphere(r = .8)
+    f = 0.8*a/2
+    return hull()(trans(0, f, 0, s) + trans(0, -f, 0, s))
 
 def assembly():
     base = roundxycube(d, b, h + e + m, rr)
@@ -43,8 +47,11 @@ def assembly():
     s1w = 5
     support1 = trans(-(c + s1w)/2 + s1w, 0, h + e + m - eps, ccube(s1w, a, 2))
     support = support1
-    ledhole = trans(-(18.5 - 9), 12.25 - 0.5, -5, roundxycube(3.5, 3.5, 20, 0.5))
-    return base + up(h + e + m - eps)(rim) + support - trans(cho, 0, -2*eps, camcutout) - cutout - hole()(ledhole)
+    ledhole = trans(-(18.5 - 9), 12.25 - 1, -5, roundxycube(3.5, 3.5, 20, 0.5))
+    rz = 3 + h + e + m
+    rx = wth
+    ridges = trans(c/2 + rx, 0, rz, ridge()) + trans(-(c/2 + rx), 0, rz, ridge())
+    return base + up(h + e + m - eps)(rim) + support - trans(cho, 0, -2*eps, camcutout) - cutout - hole()(ledhole) - ridges
 
 if __name__ == '__main__':
     a = assembly()
