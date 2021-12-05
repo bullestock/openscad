@@ -60,15 +60,22 @@ def plughole():
     c = ccube(3*wth, w, h)
     return trans(0, 0, 0, c)
 
+def ridge():
+    s = sphere(r = .5)
+    f = 0.75*a/2
+    return hull()(trans(0, f, 0, s) + trans(0, -f, 0, s))
+
 def assembly():
     base = roundxycube(d, b, h + wth, rr)
     cutout1 = roundxycube(c + 2*wth + gap, a + 2*wth + gap, 6, rr/2)
     cutout2 = roundxycube(c, a, h, rr/2)
-    print("b: %d" % b)
     dimples = trans(0, b/2 + eps, (h + 2*wth)/2, dimple(180)) + trans(0, -b/2 - eps, (h + 2*wth)/2, dimple(0))
     ch = 5
     cutter = ccube(20, 50, ch)
-    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter) - trans(0, 0, -5, cutter)
+    rz = 3
+    rx = 1.1
+    ridges = trans((c + wth)/2 + rx, 0, rz, ridge()) + trans(-((c + wth)/2 + rx), 0, rz, ridge())
+    return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter) - trans(0, 0, -5, cutter) + ridges
 
 if __name__ == '__main__':
     a = assembly()
