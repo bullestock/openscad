@@ -28,16 +28,30 @@ def sph(dia, radius, angle):
     rads = angle/360*2*math.pi
     return trans((dia/2+radius)*math.cos(rads), (dia/2+radius)*math.sin(rads), 0, sphere(r = radius))
 
-def fork(dia, th, angle):
+def sfork(dia, th, angle):
     s1 = sph(dia, th/2, angle)
     s2 = sph(dia, th/2, 0)
     return rot(0, 0, (360-angle)/2, s1 + s2 + rotate_extrude(angle=angle)(translate([dia/2+th/2, 0])(circle(d=th))))
 
+def vsfork(dia, th, angle):
+    s1 = sphere(r = th/2)
+    return up(dia)(trans(-dia, 0, 0, s1) + rot(90, 0, 180, rotate_extrude(angle=-angle)(translate([dia/2+th/2, 0])(circle(d=th)))))
+
+def fork(dia, th, angle):
+    return rot(0, 0, (360-angle)/2, rotate_extrude(angle=angle)(translate([dia/2+th/2, 0])(circle(d=th))))
+
 def stand():
     bridge_w = 10
     fork_th = 5
-    bfork = trans(bhd/2 + fork_th/2 + bridge_l/2, 0, 0, fork(bhd, fork_th, 240))
-    rfork = trans(-(rhd/2 + fork_th/4 + bridge_l/2 - 0.5), 0, 0, rot(0, 0, 180, fork(rhd, fork_th, 245)))
+    bfork = trans(bhd/2 + fork_th/2 + bridge_l/2, 0, 0, sfork(bhd, fork_th, 240))
+    rfork_arc = trans(-(rhd/2 + fork_th/4 + bridge_l/2 - 0.5), 0, 0, rot(0, 0, 180, fork(rhd, fork_th, 180)))
+    r_l = 12
+    rcyl = rot(90, 0, 90, cylinder(d = fork_th, h = r_l))
+    rc_x = (bridge_l/2 + rhd + fork_th + 1)
+    rc_y = (rhd + fork_th)/2
+    rcyls = trans(-rc_x, rc_y, 0, rcyl) + trans(-rc_x, -rc_y, 0, rcyl)
+    hooks = trans(-rc_x, rc_y, 0, vsfork(5, fork_th, 90)) + trans(-rc_x, -rc_y, 0, vsfork(5, fork_th, 90))
+    rfork = rfork_arc + rcyls + hooks
     c = trans(-bridge_l/2, 0, 0, rot(90, 0, 90, cylinder(d = fork_th, h = bridge_l)))
     bridge = hull()(trans(0, -bridge_w/2, 0, c) + trans(0, bridge_w/2, 0, c))
     hole = down(fork_th)(cylinder(d=5, h=3*fork_th))
