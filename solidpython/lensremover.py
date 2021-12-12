@@ -48,9 +48,11 @@ def knurl(d, h, r=1, numKnurls=360/15, center=False):
     return knurls
 
 def assembly():
-    d = 25
-    l = 10
-    return knurl(d, l, .5) + cylinder(d = d, h = l) + trans(-d/2, 0, l, cube([d, 1.2, 2]))
+    d2 = 25
+    d1 = 23
+    l2 = 5
+    l1 = 10
+    return knurl(d1, l1, .5) + cylinder(d = d1, h = l1) + trans(0, 0, l1, cylinder(d = d2, h = l2)) + trans(-d2/2, 0, l1+l2, cube([d2, 1, 2]))
 
 if __name__ == '__main__':
     a = assembly()
