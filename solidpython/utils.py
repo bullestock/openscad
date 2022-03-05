@@ -53,6 +53,9 @@ def trans(x, y, z, s):
 def rot(x, y, z, s):
     return rotate([x, y, z])(s)
 
+def half_cylinder(r, h):
+    return cylinder(r=r, h=h) - trans(r, 0, 0, cube(2*r+0.01, center=True))
+
 def tslotfoot(length, height):
     width = 20
     inset = 8

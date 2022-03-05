@@ -48,8 +48,13 @@ def assembly():
         trans(0, sw_h + extra_h + lever_h, 0, lever())
 
 if __name__ == '__main__':
-    a = assembly()
-    scad_render_to_file(a, file_header='$fn = %s;' % SEGMENTS, include_orig_code=False)
+    #a = assembly()
+    p1 = part(False)
+    p2 = part(True)
+    p3 = lever()
+    scad_render_to_file(p1, 'part1.scad', file_header='$fn = %s;' % SEGMENTS, include_orig_code=False)
+    scad_render_to_file(p2, 'part2.scad', file_header='$fn = %s;' % SEGMENTS, include_orig_code=False)
+    scad_render_to_file(p3, 'part3.scad', file_header='$fn = %s;' % SEGMENTS, include_orig_code=False)
 
 
 # Local Variables:

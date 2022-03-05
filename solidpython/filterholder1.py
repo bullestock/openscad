@@ -5,6 +5,8 @@ import os
 import sys
 import re
 
+# Lasersaur filter holder, with pegs
+
 # Assumes SolidPython is in site-packages or elsewhwere in sys.path
 from solid import *
 from solid.utils import *

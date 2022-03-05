@@ -31,10 +31,17 @@ def wemos(x, y, z):
 
 def oled(x, y, z, a, negative = False):
     extra = 5 if negative else 0
+    bezel_w = 30
+    bezel_h = 17
+    bezel_d = 0
+    bezel_c1 = ccube(bezel_w, bezel_h, e)
+    bezel_slant = 1 * (bezel_d + extra - e)
+    bezel_c2 = ccube(bezel_w + bezel_slant, bezel_h + bezel_slant, e)
+    bezel = hull()(bezel_c2 + trans(0, 0, bezel_d + extra - e, bezel_c1))
     return color(c = 'blue')(trans(x, y, z,
-                                   rot(90 + a, 0, 0, ccube(36, 34.3, 4 + extra) +
+                                   rot(90 + a, 0, 0, ccube(38, 36, 4 + extra) +
                                        trans(0, 15.5, 4, ccube(10, 2.5, 10)) +
-                                       trans(0, 2, -4 if negative else -1, ccube(32, 18, 4 + extra)))))
+                                       trans(0, 2, -4 if negative else -1, bezel))))
 
 def front_cuts(x, y, z, a, print = True):
     c = None
@@ -73,14 +80,14 @@ def assembly():
     disp_z = 3
     o = oled(0, disp_y, disp_z, tilt, print)
     #f = front_s(
-    f_s = front_s(0, disp_y - 1, disp_z, tilt)
+    f_s = front_s(0, disp_y + 1, disp_z, tilt)
     f = hull()(f_s)
     if not print:
         f = f - front_cuts(0, disp_y - 1, disp_z, tilt, print)
     top_depth = 25
     top_y = disp_y - top_depth - disp_height/2*math.sin(90 + tilt)
     top_z = disp_z + disp_height/2*math.cos(90+tilt)
-    t_s = top_s(0, top_y + 1.5*cr, top_z - 1.5*cr, top_depth)
+    t_s = top_s(0, top_y + 1.5*cr, top_z - 1.5*cr, top_depth + 1.2*cr)
     t = hull()(t_s)
     back_h = disp_height*math.cos(90+tilt)
     b_s = back_s(0, top_y + 2.8*cr, top_z - back_h, back_h)
@@ -97,11 +104,11 @@ def assembly():
     #a = d1 + f - o
     a = a + t + b + side1 + side2
     cutoff = trans(-width, -width, -65, cube([2*width, 2*width, width]))
-    cw = width - 5
-    cd = disp_height - 5
+    cw = width - 4
+    cd = disp_height - 2
     ch = 10
     cth = 3
-    chimney = trans(0, 0, -25, ccube(cw, cd, ch) - down(1)(ccube(cw - 2*cth, cd - 2*cth, ch+2)))
+    chimney = trans(0, 1, -25, roundxycube(cw, cd, ch, 2) - down(1)(roundxycube(cw - 2*cth, cd - 2*cth, ch+2, 2)))
     return a - cutoff + chimney
 
 if __name__ == '__main__':

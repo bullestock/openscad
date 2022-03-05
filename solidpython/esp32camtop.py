@@ -72,7 +72,7 @@ def assembly():
     dimples = trans(0, b/2 + eps, (h + 2*wth)/2, dimple(180)) + trans(0, -b/2 - eps, (h + 2*wth)/2, dimple(0))
     ch = 5
     cutter = ccube(20, 50, ch)
-    rz = 3
+    rz = 3.3
     rx = 1.1
     ridges = trans((c + wth)/2 + rx, 0, rz, ridge()) + trans(-((c + wth)/2 + rx), 0, rz, ridge())
     return base - down(eps)(cutout1 + cutout2) + dimples - trans(d/2 - wth, 0, h - 5.2, plughole()) - trans(0, 0, h+wth, cutter) - trans(0, 0, -5, cutter) + ridges

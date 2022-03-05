@@ -38,7 +38,7 @@ module part_hole(Da, Ws)
     }
 }
 
-Da = 4.5;
+Da = 5;
 Da1 = 3.5;
 Dd = 10;
 
@@ -49,15 +49,13 @@ difference()
         part(Da1, Ws, 0.3);
         translate([Dd, 0, 0]) part(Da, Ws);
         translate([2*Dd, 0, 0]) part(Da, Ws);
-        translate([3*Dd, 0, 0]) part(Da, Ws);
-        translate([-Dd/2, -Dd/2, -Dd]) cube([4*Dd, Dd, Dd]);
+        translate([-Dd/2, -Dd/2, -Dd]) cube([3*Dd, Dd, Dd]);
     }
     union()
     {
         part_hole(Da1, Ws*.8);
         translate([Dd, 0, 0]) part_hole(Da, Ws);
         translate([2*Dd, 0, 0]) part_hole(Da, Ws);
-        translate([3*Dd, 0, 0]) part_hole(Da, Ws);
-        translate([-0.25*Dd, 0, -Dd/2]) rotate([90, 0, 90]) cylinder(d = 0.8*Dd, h = 3.5*Dd, $fn=F);
+        translate([-0.25*Dd, 0, -Dd/2]) rotate([90, 0, 90]) cylinder(d = 0.8*Dd, h = 2.5*Dd, $fn=F);
     }
 }

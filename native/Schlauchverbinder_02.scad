@@ -40,8 +40,11 @@ module part(Da)
 // For lille
 // Da1 = 12.5;// Dia Hose Inside
 // Da2 = 9 ;// Dia Hose Inside
+// Close
+// Da1 = 13.5;
+// Da2 = 10;
 Da1 = 13.5;
-Da2 = 10;
+Da2 = 10.5;
 
 union()
 {

@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 64
+SEGMENTS = 16#64
 
 eps = 0.001
 
@@ -45,8 +45,25 @@ def lower():
     cut_z = 7
     return trans(0, o_l/2, -sh, outer) - hole - up(cut_z)(cutter)
 
+def upper():
+    o_l = vga_l + pcb_l + hdmi_l
+    tabs = trans(0, (o_l - pcb_l)/2, -eps, yccube(pcb_w, pcb_l, 1.5) - trans(0, -1, 0, yccube(pcb_w - 2, pcb_l + 2, 2)))
+    o_h = vga_h + 2*sh
+    o_w = pcb_w + 2*sh
+    outer = roundccube(o_w, o_l, o_h, 2)
+    sign_w = 55
+    sign = roundccube(sign_w, o_l, 2, 1)
+    cutter_h = 20
+    cutter_w = pcb_w * 2
+    cutter = trans(-cutter_w/2, -5, 0, cube([cutter_w, o_l + 10, cutter_h]))
+    logo1 = rot(0, 0, 90, text('HAL', size = 8, font = 'Contour Generator', halign = 'center'))
+    logo2 = rot(0, 0, 90, text('9K', size = 8, font = 'Contour Generator', halign = 'center'))
+    logo = linear_extrude(1)(trans(30, 15, 1, logo1 + trans(10, 0, 0, logo2)))
+    return logo + trans(0, o_l/2, -sh, outer + trans((sign_w - o_w)/2, 0, 0, sign)) - cutter + tabs + logo
+
 def assembly():
-    return lower()
+    #return lower()
+    return upper()
 
 if __name__ == '__main__':
     a = assembly()
