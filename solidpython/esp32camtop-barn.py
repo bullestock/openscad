@@ -61,7 +61,7 @@ def plughole():
     return trans(0, -6, -2, c)
 
 def ledhole():
-    return trans(20, 8, 15, rot(90, 0, 90, cylinder(d = 5, h = 10)))
+    return trans(20, 8 - 1.25, 15 - 1.25, rot(90, 0, 90, cylinder(d = 5, h = 10)))
 
 def ridge():
     s = sphere(r = .5)
