@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 64
+SEGMENTS = 64/4 #!!
 SEGMENTS_SHELL = SEGMENTS*4
 
 e = 0.001
@@ -35,7 +35,7 @@ filler_indent = 3
 # Pod
 pod_l = 17
 pod_l2 = 22
-pod_l3 = 11
+pod_l3 = 5
 pod_h = 14
 pod_h2 = 11
 wt = 2
@@ -55,33 +55,6 @@ def pod():
     usb_hole = trans(esp_l - esp_offset_x - 4, outer_w/2, 12, ccube(pod_l2, usb_w, usb_h))
     pod = pod_outer - trans(1, -esp_usb_offset, (pod_h - usb_h)/2, hole()(usb_hole))
 
-    # Hole for power plug (JST PH)
-    pwr_plug_l = 5
-    pwr_plug_x = pod_l + pod_l3
-    pwr_plug_y = 14
-    pwr_plug_z = 3
-    es = .5 # empirics
-    pwr_plug_w = 4.7 + es
-    pwr_plug_h = 6 + es
-    pwr_wire_sz = 4
-    pwr_wirehole = trans(pwr_plug_x - 10, pwr_plug_y, pwr_plug_z + (pwr_plug_h - pwr_wire_sz)/2, ccube(pod_l + 10, pwr_wire_sz, pwr_wire_sz))
-    pwr_plughole = trans(pwr_plug_x - 1, pwr_plug_y, pwr_plug_z, ccube(pwr_plug_l + 1, pwr_plug_w, pwr_plug_h))
-    pwr_plugtube = trans(pwr_plug_x, pwr_plug_y, pwr_plug_z-r, ccube(pwr_plug_l, pwr_plug_w+3, pwr_plug_h+3))
-
-    # Hole for door switches (2.54 mm header)
-    sw_plug_x = pod_l
-    sw_plug_y = 2.5
-    sw_plug_l = pod_l + pod_l3
-    sw_plug_z = 3
-    es = 1 # empirics
-    n = 2
-    sw_hdr_w = n*2.5 + es
-    sw_hdr_h = n*2.5 + es
-    es = 0.5 # empirics
-    sw_housing_w = n*2.6 + es
-    sw_housing_h = n*2.6 + es
-    sw_housing_l = 10
-    sw_hdrhole = trans(sw_plug_x, sw_plug_y, sw_plug_z, cube([sw_plug_l, sw_hdr_w, sw_hdr_h]))
     # LED hole
     led_x = pod_l
     led_y = 26
@@ -90,7 +63,7 @@ def pod():
     ledhole = trans(led_x, led_y, led_z, rot(90, 0, 90, cylinder(d = 5, h = 50)))
     ledtube = trans(led_x + 2, led_y, led_z, rot(90, 0, 90, cylinder(d = 7, h = 5)))
 
-    holes = sw_hdrhole + pwr_wirehole + pwr_plughole + pod_inner + ledhole + ledtube
+    holes = pod_inner + ledhole + ledtube
 
     esph = rot(0, 0, 180, esp_holder())
     part2 = trans(esp_offset_x, esp_offset_y, esp_offset_z, esph)
