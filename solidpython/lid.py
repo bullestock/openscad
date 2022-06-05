@@ -38,9 +38,9 @@ pod_l2 = 22
 pod_l3 = 5
 pod_h = 14
 pod_h2 = 11
-avpod_l = 19
-avpod_h = 10
-avpod_w = 19
+avpod_l = 21 # z
+avpod_h = 10 # x
+avpod_w = 19 # y
 wt = 2
 outer_w = lid_w - filler_indent
 
@@ -143,8 +143,11 @@ def avpod_inner():
     th = 2
     inner = trans(dia - 4*avpod_h +th, -(avpod_w + filler_indent),
                       lid_w - outer_w + th, roundcube(avpod_h+5, avpod_w - th, avpod_l - 2*th, r))
-    hole = trans(0, -avpod_h-2, avpod_w/2 + filler_indent, rot(0, 90, 0, cylinder(d = 12, h = 50)))
-    return inner + hole
+    x = -avpod_h + 0.5
+    y = avpod_l/2 + filler_indent
+    hole = trans(15, x, y, rot(0, 90, 0, cylinder(d = 12, h = 20)))
+    cutout = trans(21, x, y, rot(0, 90, 0, cylinder(d = 15, h = 20)))
+    return inner + hole + cutout
 
 def assembly():
     sh = shell_outer()
