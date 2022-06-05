@@ -10,7 +10,7 @@ from solid import *
 from solid.utils import *
 from utils import *
 
-SEGMENTS = 64/4 #!!
+SEGMENTS = 64
 SEGMENTS_SHELL = SEGMENTS*4
 
 e = 0.001
@@ -38,6 +38,9 @@ pod_l2 = 22
 pod_l3 = 5
 pod_h = 14
 pod_h2 = 11
+avpod_l = 19
+avpod_h = 10
+avpod_w = 19
 wt = 2
 outer_w = lid_w - filler_indent
 
@@ -126,6 +129,23 @@ def shell_inner():
     inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2, segments = 256))
     return inner
 
+def avpod_outer():
+    r = 1.5
+    pod_outer = trans(dia - 4*avpod_h, -(avpod_w + 1.5),
+                      lid_w - outer_w, roundcube(avpod_h, avpod_w, avpod_l, r))
+    inner = cylinder(d = dia, h = lid_w)
+    outer = cylinder(d = dia+15, h = lid_w)
+    cutter = outer - inner
+    return pod_outer - cutter
+
+def avpod_inner():
+    r = 1.5
+    th = 2
+    inner = trans(dia - 4*avpod_h +th, -(avpod_w + filler_indent),
+                      lid_w - outer_w + th, roundcube(avpod_h+5, avpod_w - th, avpod_l - 2*th, r))
+    hole = trans(0, -avpod_h-2, avpod_w/2 + filler_indent, rot(0, 90, 0, cylinder(d = 12, h = 50)))
+    return inner + hole
+
 def assembly():
     sh = shell_outer()
     part1 = sh + smps() - shell_inner() + shell_block()
@@ -134,7 +154,8 @@ def assembly():
     pod_t = trans(pod_offset_x, esp_offset_y,
                   (lid_w - outer_w)/1,
                   rot(180+90, 180, 90, pod()))
-    return part1 + pod_t
+    avpod_t = avpod_outer()
+    return part1 + pod_t + avpod_t - avpod_inner()
 
 if __name__ == '__main__':
     a = assembly()
