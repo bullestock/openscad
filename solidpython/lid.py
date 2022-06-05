@@ -39,8 +39,8 @@ pod_l3 = 5
 pod_h = 14
 pod_h2 = 11
 avpod_l = 21 # z
-avpod_h = 10 # x
-avpod_w = 19 # y
+avpod_h = 14.5 # x
+avpod_w = 24 # y
 wt = 2
 outer_w = lid_w - filler_indent
 
@@ -61,12 +61,12 @@ def pod():
     # LED hole
     led_x = pod_l
     led_y = 26
-    led_z = 7
+    led_z = 8
     led_l = 50
     ledhole = trans(led_x, led_y, led_z, rot(90, 0, 90, cylinder(d = 5, h = 50)))
-    ledtube = trans(led_x + 2, led_y, led_z, rot(90, 0, 90, cylinder(d = 7, h = 5)))
+    #ledtube = trans(led_x + 2, led_y, led_z, rot(90, 0, 90, cylinder(d = 7, h = 5)))
 
-    holes = pod_inner + ledhole + ledtube
+    holes = pod_inner + ledhole# + ledtube
 
     esph = rot(0, 0, 180, esp_holder())
     part2 = trans(esp_offset_x, esp_offset_y, esp_offset_z, esph)
@@ -95,9 +95,9 @@ def smps():
     l = 22 + ex
     h = 2
     wt = 1
-    inner = ccube(w, l, h + e)
+    inner = ccube(w, l, 2*h)
     outer = ccube(w + 2*wt, l + 2*wt, h)
-    return trans(8, filler_offset - dia/2 - h, lid_w/2, rot(90, 0, 180, outer - hole()(inner)))
+    return trans(6, filler_offset - dia/2 - h - 0.5, lid_w/2 - 3, rot(90, 0, 180, outer - hole()(inner)))
 
 def shell_outer():
     # Hollow cylinder
@@ -129,24 +129,26 @@ def shell_inner():
     inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2, segments = 256))
     return inner
 
+avpod_x = dia - 3*avpod_h
+
 def avpod_outer():
     r = 1.5
-    pod_outer = trans(dia - 4*avpod_h, -(avpod_w + 1.5),
+    pod_outer = trans(avpod_x, -(avpod_w + 1.5),
                       lid_w - outer_w, roundcube(avpod_h, avpod_w, avpod_l, r))
     inner = cylinder(d = dia, h = lid_w)
-    outer = cylinder(d = dia+15, h = lid_w)
+    outer = cylinder(d = dia+20, h = lid_w)
     cutter = outer - inner
     return pod_outer - cutter
 
 def avpod_inner():
     r = 1.5
     th = 2
-    inner = trans(dia - 4*avpod_h +th, -(avpod_w + filler_indent),
-                      lid_w - outer_w + th, roundcube(avpod_h+5, avpod_w - th, avpod_l - 2*th, r))
-    x = -avpod_h + 0.5
-    y = avpod_l/2 + filler_indent
-    hole = trans(15, x, y, rot(0, 90, 0, cylinder(d = 12, h = 20)))
-    cutout = trans(21, x, y, rot(0, 90, 0, cylinder(d = 15, h = 20)))
+    inner = trans(avpod_x + th, -(avpod_w + filler_indent),
+                  lid_w - outer_w + th, roundcube(avpod_h+5, avpod_w - th, avpod_l - 2*th, r))
+    y = -avpod_h + 4.5
+    z = avpod_l/2 + filler_indent
+    hole = trans(15, y, z, rot(0, 90, 0, cylinder(d = 12, h = 20)))
+    cutout = trans(21, y, z, rot(0, 90, 0, cylinder(d = 15, h = 20)))
     return inner + hole + cutout
 
 def assembly():
