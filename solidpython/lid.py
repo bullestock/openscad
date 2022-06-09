@@ -60,11 +60,10 @@ def pod():
 
     # LED hole
     led_x = pod_l
-    led_y = 26
+    led_y = 15
     led_z = 8
     led_l = 50
     ledhole = trans(led_x, led_y, led_z, rot(90, 0, 90, cylinder(d = 5, h = 50)))
-    #ledtube = trans(led_x + 2, led_y, led_z, rot(90, 0, 90, cylinder(d = 7, h = 5)))
 
     holes = pod_inner + ledhole# + ledtube
 
