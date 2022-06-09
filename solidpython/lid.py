@@ -148,7 +148,7 @@ def avpod_inner():
     y = -avpod_h + 4.5
     z = avpod_l/2 + filler_indent
     hole = trans(15, y, z, rot(0, 90, 0, cylinder(d = 12, h = 20)))
-    cutout = trans(21, y, z, rot(0, 90, 0, cylinder(d = 15, h = 20)))
+    cutout = trans(17.5, y, z, rot(0, 90, 0, cylinder(d = 15, h = 20)))
     return inner + hole + cutout
 
 def assembly():
