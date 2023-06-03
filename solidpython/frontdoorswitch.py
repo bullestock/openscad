@@ -15,15 +15,15 @@ SEGMENTS = 64
 eps = 0.01
 width = 12
 sw_h = 3
-sw_w = 6.3
+sw_w = 6.2
 button_h = 1.35
 lever_h = 2.5
-sw_plate_th = 0.5
+sw_plate_th = 2.5
 extra_h = sw_plate_th + button_h + lever_h
 plate_th = 1.35
 holes_dist = 6.35
 hole_inset = 2
-rod_dia = 1.4
+rod_dia = 1.4 + .1
 
 def block():
     return cube([width, sw_h + extra_h, plate_th])
@@ -63,7 +63,8 @@ def lever():
     stopper = cube([hole_inset, button_h - 0.1, sw_w - 2*clearance])
     pivot = cube([hole_inset*2 + clearance, lever_h, sw_w]) - \
         trans(hole_inset, lever_h/2, -1, cylinder(d = rod_dia, h = sw_w + 2))
-    upper_body = trans(2 * hole_inset + clearance, 0, -plate_th, cube([width - 2 * hole_inset, eps, sw_w + 2 * plate_th]))
+    upper_body = trans(2 * hole_inset + clearance, 0, -plate_th,
+                       cube([width - 2 * hole_inset, 1, sw_w + 2 * plate_th]))
     inset = 1
     lower_body = trans(2 * hole_inset + clearance, 0, inset,
                        cube([width - 2 * hole_inset, eps, sw_w - 2*inset]))

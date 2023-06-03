@@ -49,7 +49,7 @@ def pod():
     pod_outer = (trans(0, 0, pod_h2, roundcube(pod_l + pod_l2, outer_w, pod_h, r)) +
                  trans(0, 0, 0, roundcube(pod_l + pod_l3, outer_w, pod_h2 + 2*r, r)))
     inner_w = pod_h + pod_h2 - 4*wt
-    pod_inner = trans(-r, 2, 3.5, roundcube(pod_l2, esp_w - 3, inner_w, r))
+    pod_inner = trans(-r, 2, 3.5-2, roundcube(pod_l2, esp_w - 3, inner_w, r))
     usb_w = 12
     usb_h = 8
     esp_offset_x = esp_l/2 - 16 + 2
@@ -61,7 +61,7 @@ def pod():
     # LED hole
     led_x = pod_l
     led_y = 15
-    led_z = 8
+    led_z = 6.5
     led_l = 50
     ledhole = trans(led_x, led_y, led_z, rot(90, 0, 90, cylinder(d = 5, h = 50)))
 
@@ -99,20 +99,20 @@ def smps():
     return trans(6, filler_offset - dia/2 - h - 0.5, lid_w/2 - 3, rot(90, 0, 180, outer - hole()(inner)))
 
 def shell_outer():
+    correction = 1
     # Hollow cylinder
     outer = cylinder(d = dia, h = lid_w, segments = SEGMENTS_SHELL)
     # Remove part of the cylinder that we don't need
-    cutter = trans(0, dia/2, -1, ccube(dia + 2, dia, lid_w + 2))
+    cutter = trans(0, dia/2 + correction, -1, ccube(dia + 2, dia, lid_w + 2))
     # Make round corners
     rounder_cube = cube([lid_th + 2, corner_r, corner_r])
     rounder_cyl = trans(-1, 0, 0, rot(0, 90, 0, cylinder(r = corner_r, h = lid_th + 4)))
     rounder = rounder_cube - rounder_cyl
-    adj = 0
-    rounder1 = trans(-dia/2 - 1, -corner_r + adj + 0.5, lid_w - corner_r, rounder)
-    rounder2 = trans(dia/2 - lid_th - 1, -corner_r + adj + 0.5, lid_w - corner_r, rounder)
+    rounder1 = trans(-dia/2 - 1, -corner_r + correction + 0.5, lid_w - corner_r, rounder)
+    rounder2 = trans(dia/2 - lid_th - 1, -corner_r + correction + 0.5, lid_w - corner_r, rounder)
     # Inner slit at edges
-    slit1 = trans(dia/2 - 2, adj, -1, ccube(2, 2.5, lid_w + 2))
-    slit2 = trans(-(dia/2 - 2), adj, -1, ccube(2, 2.5, lid_w + 2))
+    slit1 = trans(dia/2 - 2, correction, -1, ccube(2, 2.5, lid_w + 2))
+    slit2 = trans(-(dia/2 - 2), correction, -1, ccube(2, 2.5, lid_w + 2))
     return outer - cutter - rounder1 - rounder2 - slit1 - slit2
 
 def shell_block():
@@ -121,21 +121,20 @@ def shell_block():
     filler = up(filler_indent)(cylinder(d = dia - 2*lid_th, h = filler_h) -
                                       trans(-dia/2, -dia/2 + filler_offset, -2, cube([dia, dia, lid_w+4])))
     screwhole = trans(0, -dia/2 + 4.8, -lid_w/2, cylinder(d = 4.5, h = 2*lid_w))
-    cutter = trans(0, dia/2, -1, ccube(dia + 2, dia, lid_w + 2))
     return filler - screwhole
 
 def shell_inner():
     inner = down(1)(cylinder(d = dia - 2*lid_th, h = lid_w+2, segments = 256))
     return inner
 
-avpod_x = dia - 3*avpod_h
+avpod_x = dia - 2.6*avpod_h
 
 def avpod_outer():
     r = 1.5
     pod_outer = trans(avpod_x, -(avpod_w + 1.5),
                       lid_w - outer_w, roundcube(avpod_h, avpod_w, avpod_l, r))
     inner = cylinder(d = dia, h = lid_w)
-    outer = cylinder(d = dia+20, h = lid_w)
+    outer = cylinder(d = dia+35, h = lid_w)
     cutter = outer - inner
     return pod_outer - cutter
 
@@ -147,7 +146,7 @@ def avpod_inner():
     y = -avpod_h + 4.5
     z = avpod_l/2 + filler_indent
     hole = trans(15, y, z, rot(0, 90, 0, cylinder(d = 12, h = 20)))
-    cutout = trans(17.5, y, z, rot(0, 90, 0, cylinder(d = 15, h = 20)))
+    cutout = trans(23.4, y, z, rot(0, 90, 0, cylinder(d = 15, h = 20)))
     return inner + hole + cutout
 
 def assembly():

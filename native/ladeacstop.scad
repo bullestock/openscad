@@ -81,7 +81,7 @@ module maketop()
         {
             union()
             {
-                rounded_box(box_w, box_l + box_l_extra, box_h, 2, 5, false, 2, 2, 1);
+                rounded_box(box_w, box_l + box_l_extra, box_h, 2, 5);
                 topstandoff(32.5, 55 + box_l_extra/2);
                 topstandoff(-32.5, 55 + box_l_extra/2);
                 topstandoff(32.5, -40 - box_l_extra/2);

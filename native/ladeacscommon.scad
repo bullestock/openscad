@@ -1,5 +1,5 @@
 module rounded_box(x=10,y=20,z=10,r=0.25,wall=2,
-			has_lid=true,lid_thick=2,lid_ledge_width=1,lid_ledge_depth=1)
+		   has_lid=false, has_ridge=false, lid_thick=2,lid_ledge_width=2,lid_ledge_depth=2)
 {
 	/*
 		Purpose:  Create a hollow enclosure with rounded corners and an optional lid
@@ -45,7 +45,7 @@ module rounded_box(x=10,y=20,z=10,r=0.25,wall=2,
 		}
 
 		//optionally, create a ledge for a lid
-		if(has_lid == true)
+		if(has_lid || has_ridge)
 		{
 		  //generate the ledge
 		  translate([0,0,(z/2)-lid_ledge_depth])
@@ -64,7 +64,7 @@ module rounded_box(x=10,y=20,z=10,r=0.25,wall=2,
 	}//difference
 	 
 	//optionally generate a lid
-	if(has_lid == true)
+	if(has_lid)
 	{
 		//bottom plate
 		translate([0,1.1*y+r,-z/2-r])//align lid bottom and box bottom 
@@ -99,6 +99,10 @@ module rounded_box(x=10,y=20,z=10,r=0.25,wall=2,
 
 module set_cutout(x,y,z,w,l,h) {
     translate(v = [x, y, z]) cube([w+0.4, l+0.2, h+0.2], center = true);
+}
+
+module set_cyl_cutout(x, y, z, d) {
+    translate(v = [x, y + 5, z]) rotate([90]) cylinder(d = d, h = 10);
 }
 
 box_w = 75;

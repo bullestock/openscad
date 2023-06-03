@@ -21,6 +21,9 @@ Clock_w = 10;
 Clock_d = 12.0;
 Clock_h = 7.8;
 
+Ccam_x = 0;
+Ccam_z = 3;
+
 Crj45_x = Cusb_x + 22.5 - 1;
 Crj45_y = -1;
 Crj45_w = 16.4;			// 15.4
@@ -54,7 +57,7 @@ module makebottom()
         {
             union()
             {
-                rounded_box(box_w, box_l + box_l_extra, box_h, 2, 5, false, 2, 2, 1);
+                rounded_box(box_w, box_l + box_l_extra, box_h, 2, 5);
                 translate([Clock_x, -(box_l + box_l_extra)/2+Clock_d/2, 0]) cube([Clock_w*1.8, Clock_d, box_h-.1], center = true);
                 standoff(32.5, 55 + box_l_extra/2);
                 standoff(-32.5, 55 + box_l_extra/2);
@@ -67,6 +70,10 @@ module makebottom()
             set_cutout(Cpwr_x, -(box_l + box_l_extra)/2, Cpwr_z, Cpwr_w, 2*Cpwr_d, Cpwr_h+0.1);
             set_cutout(Clock_x, -(box_l + box_l_extra)/2, Clock_z, Clock_w,Clock_d*2,Clock_h+0.1);
             set_cutout(Clock_x, -(box_l + box_l_extra)/2, Clock_z - 3, 3, Clock_d,Clock_h+0.1);
+
+            set_cyl_cutout(Ccam_x, -(box_l + box_l_extra)/2, Ccam_z, 11.5);
+            
+
             translate([20, -40, -15]) cylinder(d = 5, h = 10);
             translate([-20, -40, -15]) cylinder(d = 5, h = 10);
             translate([20, 50 + box_l_extra/2, -8]) hull()
